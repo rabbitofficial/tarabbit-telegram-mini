@@ -1,4 +1,4 @@
-# tarabbit-telegram-mini
+# Tarabbit-telegram-mini
 
 This project is based on Vue3 framework.
 
