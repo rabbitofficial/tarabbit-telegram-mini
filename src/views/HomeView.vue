@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="level flexCenter">
-      <span class="zero">0</span><span class="level-0">Level 0</span>
+      <span class="zero">10</span><span class="level-0">Level 0</span>
     </div>
 
     <div class="circleEye">
@@ -178,7 +178,7 @@ button {
 .iphone-x-light-default {
   position: relative;
   width: calc(428 * var(--rpx));
-  height: calc(47 * var(--rpx));
+  height: calc(10 * var(--rpx));
   margin: 0 0 0 0;
   z-index: 1;
   overflow: hidden;
@@ -312,10 +312,10 @@ button {
   flex-wrap: nowrap;
   gap: calc(8 * var(--rpx));
   position: absolute;
-  width: calc(79 * var(--rpx));
-  height: calc(106 * var(--rpx));
+  /*  width: calc(79 * var(--rpx));
+  height: calc(106 * var(--rpx)); */
   top: calc(16 * var(--rpx));
-  left: calc(29 * var(--rpx));
+  left: calc(37 * var(--rpx));
   padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
   z-index: 17;
 }
@@ -336,8 +336,8 @@ button {
   justify-content: center;
   flex-shrink: 0;
   position: relative;
-  width: calc(79 * var(--rpx));
-  height: calc(48 * var(--rpx));
+  /* width: calc(79 * var(--rpx));
+  height: calc(48 * var(--rpx)); */
   color: #ffffff;
   font-family: Lato, var(--default-font-family);
   font-size: calc(20 * var(--rpx));
@@ -405,8 +405,8 @@ button {
   justify-content: center;
   flex-shrink: 0;
   position: relative;
-  width: calc(65 * var(--rpx));
-  height: calc(48 * var(--rpx));
+  /* width: calc(65 * var(--rpx));
+  height: calc(48 * var(--rpx)); */
   color: #ffffff;
   font-family: Lato, var(--default-font-family);
   font-size: calc(20 * var(--rpx));

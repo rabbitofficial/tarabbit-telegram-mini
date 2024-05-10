@@ -187,7 +187,7 @@ button {
 .iphone-x-light-default {
   position: relative;
   width: calc(428 * var(--rpx));
-  height: calc(47 * var(--rpx));
+  height: calc(10 * var(--rpx));
   margin: 0 0 0 0;
   z-index: 1;
   overflow: hidden;
