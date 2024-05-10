@@ -9,7 +9,12 @@
     <div class="nav">
       <div class="nav-2">
         <div class="internet">
-          <div class="vector"></div>
+          <div class="iconLeft">
+            <img src="../assets/images/lang.svg" alt="" style="visibility: hidden;">
+          </div>
+          <div class="iconRight">
+            <img src="../assets/images/lang.svg" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -37,10 +42,13 @@
     <div class="light-gradient"></div>
     <div class="atBottom">
       <div class="rectangle">
-        <div class="frame-3">
-          <div class="cards-4"></div>
-          <span class="label">Boosts <br />Fortunes</span>
-        </div>
+        <router-link to="/fortune">
+          <div class="frame-3">
+            <div class="cards-4"></div>
+            <span class="label">Boosts <br />Fortunes</span>
+          </div>
+        </router-link>
+
         <div class="frame-5">
           <div class="suit-club-fill">
             <div class="people-fill">
@@ -57,6 +65,31 @@
 </template>
 
 <style scoped>
+.internet {
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 calc(25 * var(--rpx));
+  z-index: 13;
+  display: flex;
+  color: white;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.iconLeft {
+  display: flex;
+  align-items: center;
+}
+
+.iconLeft img {
+  margin-right: calc(5 * var(--rpx));
+  width: calc(25 * var(--rpx));
+}
+
+.iconRight img {
+  width: calc(30 * var(--rpx));
+}
+
 .flexCenter {
   display: flex;
   align-items: center;
@@ -135,8 +168,8 @@ button {
 
 .main-container {
   position: relative;
-  width: calc(428 * var(--rpx));
-  height: calc(926 * var(--rpx));
+  width: 100vw;
+  height: 100vh;
   margin: 0 auto;
   background: #010007;
   overflow: hidden;
@@ -149,84 +182,6 @@ button {
   margin: 0 0 0 0;
   z-index: 1;
   overflow: hidden;
-}
-
-.notch {
-  position: absolute;
-  width: calc(183 * var(--rpx));
-  height: calc(30 * var(--rpx));
-  top: calc(-2 * var(--rpx));
-  left: calc(122 * var(--rpx));
-  z-index: 2;
-}
-
-
-.left-side {
-  position: absolute;
-  width: calc(54 * var(--rpx));
-  height: calc(21 * var(--rpx));
-  top: calc(12 * var(--rpx));
-  left: calc(21 * var(--rpx));
-  z-index: 8;
-  border-radius: calc(32 * var(--rpx));
-}
-
-.time {
-  position: absolute;
-  width: calc(54 * var(--rpx));
-  height: calc(21 * var(--rpx));
-  top: 0;
-  left: 0;
-  z-index: 9;
-  border-radius: calc(32 * var(--rpx));
-}
-
-.right-side {
-  position: absolute;
-  width: calc(66.661376953125 * var(--rpx));
-  height: calc(11.336018562316895 * var(--rpx));
-  top: calc(17.3306884765625 * var(--rpx));
-  left: calc(346 * var(--rpx));
-  z-index: 4;
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: calc(10 * var(--rpx));
-  position: relative;
-  width: calc(428 * var(--rpx));
-  margin: 0 0 0 0;
-  z-index: 11;
-}
-
-.nav-2 {
-  flex-shrink: 0;
-  position: relative;
-  width: calc(392 * var(--rpx));
-  height: calc(32 * var(--rpx));
-  z-index: 12;
-}
-
-.internet {
-  position: relative;
-  width: calc(32 * var(--rpx));
-  height: calc(32 * var(--rpx));
-  margin: 0 0 0 calc(360 * var(--rpx));
-  z-index: 13;
-  overflow: hidden;
-}
-
-.vector {
-  position: relative;
-  width: calc(30 * var(--rpx));
-  height: calc(30 * var(--rpx));
-  margin: calc(3.25 * var(--rpx)) 0 0 calc(3.25 * var(--rpx));
-  background: url(../assets/images/lang.svg) no-repeat center;
-  background-size: 100% 100%;
-  z-index: 14;
 }
 
 .zero {
@@ -327,10 +282,9 @@ button {
 
 .light-gradient {
   position: absolute;
-  width: calc(781.6665449075322 * var(--rpx));
-  height: calc(938.000034167728 * var(--rpx));
-  top: calc(-0.000034167728017564514 * var(--rpx));
-  left: calc(-145.44681834503217 * var(--rpx));
+  top: 0;
+  width: 100vw;
+  height: 100vh;
   background: url(../assets/images/bg.svg) no-repeat center;
   background-size: cover;
   overflow: hidden;
@@ -348,6 +302,8 @@ button {
   border-radius: calc(16 * var(--rpx));
   box-shadow: 0 calc(6 * var(--rpx)) calc(10 * var(--rpx)) 0 rgba(120, 120, 120, 0.1);
 }
+
+/* bootst */
 
 .frame-3 {
   display: flex;
@@ -393,6 +349,8 @@ button {
   overflow: hidden;
 }
 
+/* invite friends */
+
 .frame-5 {
   display: flex;
   flex-direction: column;
@@ -407,6 +365,7 @@ button {
   padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
   z-index: 20;
 }
+
 
 .suit-club-fill {
   display: flex;
@@ -458,6 +417,9 @@ button {
   z-index: 24;
   overflow: hidden;
 }
+
+
+/* 3 left */
 
 .number {
   display: flex;
