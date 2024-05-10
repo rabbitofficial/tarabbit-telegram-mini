@@ -13,8 +13,15 @@
         </div>
       </div>
     </div>
-    <span class="zero">0</span><span class="level-0">Level 0</span>
+    <div class="level flexCenter">
+      <span class="zero">0</span><span class="level-0">Level 0</span>
+    </div>
+
     <div class="circleEye">
+      <div class="openEye">
+        <!-- <img class="open" src="../assets/images/eyeOpen.png" alt=""> -->
+        <img class="close" src="../assets/images/eyeClose.png" alt="">
+      </div>
       <div class="frame"></div>
       <div class="hand">
         <img src="../assets/images/hand.png" alt="">
@@ -50,10 +57,38 @@
 </template>
 
 <style scoped>
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.openEye {
+  position: absolute;
+  z-index: 51;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.openEye .open {
+  width: calc(63* var(--rpx));
+}
+
+.openEye .close {
+  margin-top: calc(25* var(--rpx));
+  width: calc(63* var(--rpx));
+}
+
 .middleText {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.level {
+  flex-direction: column;
 }
 
 .circleEye {
@@ -219,7 +254,7 @@ button {
   position: relative;
   width: calc(87 * var(--rpx));
   height: calc(26 * var(--rpx));
-  margin: calc(15 * var(--rpx)) 0 0 calc(170 * var(--rpx));
+  margin: calc(15 * var(--rpx)) 0 0 0;
   color: #ffffff;
   font-family: Lato, var(--default-font-family);
   font-size: calc(22 * var(--rpx));
@@ -236,7 +271,7 @@ button {
   width: 83%;
   height: calc(339 * var(--rpx));
   margin: calc(8 * var(--rpx)) 0 0 0;
-  background: url(../assets/images/noeye.png) no-repeat center;
+  background: url(../assets/images/emptyEye.png) no-repeat center;
   background-size: cover;
   z-index: 25;
 }
