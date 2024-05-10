@@ -23,11 +23,14 @@
     </div>
 
     <div class="circleEye">
-      <div class="openEye">
-        <!-- <img class="open" src="../assets/images/eyeOpen.png" alt=""> -->
-        <img class="close" src="../assets/images/eyeClose.png" alt="">
+      <div class="combine animate__animated animate__bounce">
+        <div class="openEye">
+          <!-- <img class="open" src="../assets/images/eyeOpen.png" alt=""> -->
+          <img class="close" src="../assets/images/eyeClose.png" alt="">
+        </div>
+        <div class="frame"></div>
       </div>
-      <div class="frame"></div>
+
       <div class="hand">
         <img src="../assets/images/hand.png" alt="">
       </div>
@@ -65,6 +68,15 @@
 </template>
 
 <style scoped>
+.combine {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  align-items: center;
+  z-index: 55;
+}
+
 .internet {
   position: relative;
   box-sizing: border-box;
@@ -102,16 +114,17 @@
   width: 100%;
   display: flex;
   align-items: center;
+  top: calc(145 * var(--rpx));
   justify-content: center;
 }
 
 .openEye .open {
-  width: calc(63* var(--rpx));
+  width: calc(58* var(--rpx));
 }
 
 .openEye .close {
   margin-top: calc(25* var(--rpx));
-  width: calc(63* var(--rpx));
+  width: calc(58* var(--rpx));
 }
 
 .middleText {
@@ -315,7 +328,7 @@ button {
   /*  width: calc(79 * var(--rpx));
   height: calc(106 * var(--rpx)); */
   top: calc(16 * var(--rpx));
-  left: calc(37 * var(--rpx));
+  left: calc(29 * var(--rpx));
   padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
   z-index: 17;
 }
