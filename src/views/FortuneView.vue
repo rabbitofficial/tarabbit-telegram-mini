@@ -20,18 +20,27 @@ const ramdomNa = (Math.random() - 0.5) * 2 * 50
 const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
   dom.style['transform'] = ''
+  //dom.style['transition-duration'] = ''
 }
 
 const shuffle = () => {
   cardDoms.forEach((item, index) => {
     const myMoveObj = move(item.el);
-    myMoveObj.duration(300).translate(getRandomInRange(-200, 200, 2), getRandomInRange(-200, 200, 2)).skew(getRandomInRange(-100, 100, 2)).rotate(getRandomInRange(-1100, 1100, 2)).ease('snap').end(() => {
+    //myMoveObj.duration(300).translate(getRandomInRange(-200, 200, 2), getRandomInRange(-200, 200, 2)).skew(getRandomInRange(-100, 100, 2)).rotate(getRandomInRange(-1100, 1100, 2)).ease('snap').end(() => {
+    //myMoveObj.duration(200).translate(getRandomInRange(-300, 300, 2), getRandomInRange(-300, 300, 2)).ease('snap').end(() => {
+    myMoveObj.duration(800).scale(0).rotate(getRandomInRange(-1100, 1100, 2)).translate(getRandomInRange(-600, 600, 2), getRandomInRange(-600, 600, 2)).ease('linear').end(() => {
       //item.el.removeAttribute('style')
       resetDefault(item.el)
-      myMoveObj.duration(300).translate(0, 0).ease('snap').rotate(0).skew(0).end(() => {
+      myMoveObj.duration(500).translate(0, 0).scale(1).ease('linear').end(() => {
         resetDefault(item.el)
       })
     })
+
+    /* setTimeout(() => {
+      myMoveObj.duration(500).translate(0, 0).scale(1).end(() => {
+        resetDefault(item.el)
+      })
+    }, 500) */
   })
 }
 
