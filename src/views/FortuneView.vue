@@ -1,4 +1,5 @@
 <script setup>
+import GenFill from '../assets/images/genFill.svg';
 </script>
 
 <template>
@@ -28,7 +29,10 @@
     </div>
 
     <div class="shuffleCard flexCenter">
-      <img src="../assets/images/cards.svg" alt="">
+
+      <!-- <img src="../assets/images/cards.svg" alt=""> -->
+      <img :src="GenFill" alt="" v-for="(item, index) in 10" :key="index"
+        :style="{ left: 'calc(' + (index + 1) * 6 + ' * var(--rpx))' }">
     </div>
     <div class="bottonText flexCenter">
       <div class="bottomButton">
@@ -56,14 +60,20 @@
 
 .shuffleCard {
   width: 100%;
+  position: relative;
   margin-top: calc(100 * var(--rpx));
-  ;
+  left: calc(100 * var(--rpx));
 }
 
 .shuffleCard img {
   z-index: 52;
-  width: calc(250 * var(--rpx));
-  ;
+  width: calc(160 * var(--rpx));
+  object-fit: contain;
+  box-sizing: border-box;
+  border: calc(1 * var(--rpx)) solid #141414;
+  top: 0;
+  border-radius: calc(24 * var(--rpx));
+  position: absolute;
 }
 
 .bottonText {
