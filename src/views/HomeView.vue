@@ -1,4 +1,31 @@
 <script setup>
+import { onMounted, ref } from 'vue';
+
+const circleEle = ref(null);
+const eyeOn = ref(false)
+const canRoll = ref(true)
+const leftRollCount = ref(2)
+
+
+onMounted(() => {
+  if (leftRollCount.value > 0) {
+    canRoll.value = true
+  }
+});
+
+const roll = () => {
+  canRoll.value = false
+  leftRollCount.value--
+  move(circleEle.value).duration(2000).rotate(1440).ease('in-out')
+    .end(() => {
+      circleEle.value.removeAttribute('style')
+      eyeOn.value = true
+      if (leftRollCount.value > 0) {
+        canRoll.value = true
+      }
+    });
+  console.log(circleEle.value)
+}
 </script>
 
 <template>
@@ -23,15 +50,15 @@
     </div>
 
     <div class="circleEye">
-      <div class="combine animate__animated animate__bounce">
+      <div class="combine" ref="circleEle">
         <div class="openEye">
-          <!-- <img class="open" src="../assets/images/eyeOpen.png" alt=""> -->
-          <img class="close" src="../assets/images/eyeClose.png" alt="">
+          <img class="open" src="../assets/images/eyeOpen.png" alt="" v-if="eyeOn">
+          <img class="close" src="../assets/images/eyeClose.png" alt="" v-if="!eyeOn">
         </div>
         <div class="frame"></div>
       </div>
 
-      <div class="hand">
+      <div class="hand" @click="canRoll && roll()">
         <img src="../assets/images/hand.png" alt="">
       </div>
     </div>
@@ -61,13 +88,17 @@
           <span class="label-7">Invite <br />Friends</span>
         </div>
       </div>
-      <span class="number">3</span><span class="label-8">Flips Left</span>
+      <span class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
     </div>
 
   </div>
 </template>
 
 <style scoped>
+/* .combine {
+  --animate-duration: 3.5s;
+} */
+
 .combine {
   display: flex;
   flex-direction: column;
@@ -146,7 +177,7 @@
 }
 
 .hand {
-  z-index: 50;
+  z-index: 60;
   position: absolute;
   top: calc(287* var(--rpx));
   right: calc(60* var(--rpx));
