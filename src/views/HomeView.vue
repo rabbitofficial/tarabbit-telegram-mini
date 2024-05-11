@@ -25,11 +25,11 @@ const test = () => {
     })
   })
 }
+
 const roll = () => {
-  //canRoll.value = false
+  canRoll.value = false
   leftRollCount.value--
   move(circleEle.value).duration(1200).rotate(360 * 10).ease('in')
-    .scale(1)
     .end(() => {
       // plus 100
       move(plusPoint.value).duration(800).y(-100).set('opacity', '1').ease('in').end(() => {
@@ -41,15 +41,12 @@ const roll = () => {
         })
       })
 
-      move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').scale(1).end(() => {
+      move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').end(() => {
+        if (leftRollCount.value > 0) {
+          canRoll.value = true
+        }
       })
-      /* circleEle.value.removeAttribute('style')
-      eyeOn.value = true
-      if (leftRollCount.value > 0) {
-        canRoll.value = true
-      } */
     });
-  console.log(circleEle.value)
 }
 </script>
 

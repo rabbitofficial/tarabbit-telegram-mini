@@ -1,5 +1,40 @@
 <script setup>
 import GenFill from '../assets/images/genFill.svg';
+import { onMounted } from 'vue';
+import _ from 'underscore'
+
+const cardDoms = []
+
+const setItemRefs = (el, item) => {
+  cardDoms.push({
+    id: item,
+    el,
+  })
+}
+
+function getRandomInRange(from, to, fixed) {
+  return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+}
+
+const ramdomNa = (Math.random() - 0.5) * 2 * 50
+const resetDefault = (dom) => {
+  dom.style['transition-timing-function'] = ''
+  dom.style['transform'] = ''
+}
+
+const shuffle = () => {
+  cardDoms.forEach((item, index) => {
+    const myMoveObj = move(item.el);
+    myMoveObj.duration(300).translate(getRandomInRange(-200, 200, 2), getRandomInRange(-200, 200, 2)).ease('snap').end(() => {
+      //item.el.removeAttribute('style')
+      resetDefault(item.el)
+      myMoveObj.duration(300).translate(0, 0).ease('snap').end(() => {
+        resetDefault(item.el)
+      })
+    })
+  })
+}
+
 </script>
 
 <template>
@@ -31,10 +66,10 @@ import GenFill from '../assets/images/genFill.svg';
     <div class="shuffleCard flexCenter">
 
       <!-- <img src="../assets/images/cards.svg" alt=""> -->
-      <img :src="GenFill" alt="" v-for="(item, index) in 10" :key="index"
+      <img :src="GenFill" alt="" v-for="(item, index) in 12" :key="index" :ref="(el) => setItemRefs(el, item)"
         :style="{ left: 'calc(' + (index + 1) * 6 + ' * var(--rpx))' }">
     </div>
-    <div class="bottonText flexCenter">
+    <div class="bottonText flexCenter" @click="shuffle()">
       <div class="bottomButton">
         <span class="content">Shuffle Cards</span>
       </div>
