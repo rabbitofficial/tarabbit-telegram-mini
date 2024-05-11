@@ -12,3 +12,11 @@ body {
     font-size: calc(16 * var(--rpx));
     color: white;
 }
+
+.globalHide {
+    visibility: hidden;
+}
+
+a{
+    text-decoration: none;
+}

@@ -83,12 +83,14 @@ const roll = () => {
         <img src="../assets/images/hand.png" alt="">
       </div>
     </div>
-    <div class="middleText">
-      <button class="cta-with-icon">
-        <div class="cards"></div>
-        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
-      </button>
-    </div>
+    <router-link to="/fortuneFlip">
+      <div class="middleText">
+        <button class="cta-with-icon">
+          <div class="cards"></div>
+          <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
+        </button>
+      </div>
+    </router-link>
 
     <div class="light-gradient"></div>
     <div class="atBottom">

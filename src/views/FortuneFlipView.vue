@@ -1,40 +1,27 @@
 <script setup>
-import GenFill from '../assets/images/genFill.svg';
-import { onMounted } from 'vue';
-import _ from 'underscore'
+import heartFill from '../assets/images/heartFill.svg';
+import hatFill from '../assets/images/hatFill.svg';
+import moneyFill from '../assets/images/moneyFill.svg';
+import { ref } from 'vue';
 
-const cardDoms = []
-
-const setItemRefs = (el, item) => {
-  cardDoms.push({
-    id: item,
-    el,
-  })
-}
-
-function getRandomInRange(from, to, fixed) {
-  return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
-}
-
-const ramdomNa = (Math.random() - 0.5) * 2 * 50
 const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
   dom.style['transform'] = ''
 }
+const flip2 = ref(null)
+const flip2back = ref(null)
 
-const shuffle = () => {
-  cardDoms.forEach((item, index) => {
-    const myMoveObj = move(item.el);
-    myMoveObj.duration(300).translate(getRandomInRange(-200, 200, 2), getRandomInRange(-200, 200, 2)).skew(getRandomInRange(-100, 100, 2)).rotate(getRandomInRange(-1100, 1100, 2)).ease('snap').end(() => {
-      //item.el.removeAttribute('style')
-      resetDefault(item.el)
-      myMoveObj.duration(300).translate(0, 0).ease('snap').rotate(0).skew(0).end(() => {
-        resetDefault(item.el)
-      })
-    })
+const flipCard = () => {
+  move(flip2.value).rotateY(180).then(() => {
+
+  }).end(() => {
+    //resetDefault(flip2.value)
+  })
+
+  move(flip2back.value).rotateY(0).end(() => {
+    //resetDefault(flip2.value)
   })
 }
-
 </script>
 
 <template>
@@ -60,18 +47,30 @@ const shuffle = () => {
         <div class="cards"></div>
         <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
       </button>
-      <span class="otherTopics">Other topics</span>
+      <!-- <span class="otherTopics">Other topics</span> -->
     </div>
 
     <div class="shuffleCard flexCenter">
+      <div class="cardWrap">
+        <img :src="heartFill" alt="" ref="flip1">
+        <div class="flexCenter backCard1" ref="flip1back"></div>
+      </div>
+      <div class="cardWrap">
+        <img :src="hatFill" alt="" ref="flip2">
+        <div class="flexCenter backCard2" ref="flip2back">123</div>
+      </div>
 
-      <!-- <img src="../assets/images/cards.svg" alt=""> -->
-      <img :src="GenFill" alt="" v-for="(item, index) in 12" :key="index" :ref="(el) => setItemRefs(el, item)"
-        :style="{ left: 'calc(' + (index + 1) * 6 + ' * var(--rpx))' }">
+      <div class="cardWrap">
+        <img :src="moneyFill" alt="" ref="flip3">
+        <div class="flexCenter backCard3" ref="flip3back"></div>
+      </div>
+
+
+
     </div>
-    <div class="bottonText flexCenter" @click="shuffle()">
+    <div class="bottonText flexCenter" @click="flipCard()">
       <div class="bottomButton">
-        <span class="content">Shuffle Cards</span>
+        <span class="content">Flip Cards -50</span>
       </div>
     </div>
 
@@ -92,23 +91,43 @@ const shuffle = () => {
   font-size: calc(18 * var(--rpx));
 }
 
+.cardWrap {
+  z-index: 61;
+  position: relative;
+
+}
+
+.backCard2 {
+  position: absolute;
+  top: 0;
+  background-color: white;
+  width: calc(100* var(--rpx));
+  height: calc(167* var(--rpx));
+  transform: rotateY(180deg);
+  z-index: 100;
+  color: #010007;
+  border-radius: calc(10 * var(--rpx));
+}
 
 .shuffleCard {
   width: 100%;
   position: relative;
   margin-top: calc(100 * var(--rpx));
-  left: calc(100 * var(--rpx));
+  display: flex;
+  align-items: center;
+  gap: calc(20 * var(--rpx));
+  justify-content: center;
 }
 
 .shuffleCard img {
-  z-index: 52;
-  width: calc(160 * var(--rpx));
+  z-index: 101;
+  width: calc(100 * var(--rpx));
   object-fit: contain;
   box-sizing: border-box;
-  border: calc(1 * var(--rpx)) solid #141414;
+  /* border: calc(1 * var(--rpx)) solid #141414; */
   top: 0;
-  border-radius: calc(24 * var(--rpx));
-  position: absolute;
+  position: relative;
+  backface-visibility: hidden;
 }
 
 .bottonText {
@@ -132,10 +151,9 @@ const shuffle = () => {
   z-index: 31;
   box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
   color: white;
-  background: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(90deg, rgba(220, 130, 151, 0.8) 0%, rgba(98, 27, 170, 0.8) 100%);
   border: calc(1 * var(--rpx)) solid #FFFFFF;
   border-radius: calc(100 * var(--rpx));
-
 }
 
 .content {
