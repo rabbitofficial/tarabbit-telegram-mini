@@ -2,9 +2,10 @@
 import { onMounted, ref } from 'vue';
 
 const circleEle = ref(null);
+const plusPoint = ref(null);
 const eyeOn = ref(false)
 const canRoll = ref(true)
-const leftRollCount = ref(2)
+const leftRollCount = ref(12)
 
 
 onMounted(() => {
@@ -13,16 +14,40 @@ onMounted(() => {
   }
 });
 
+// plus 100 test
+const test = () => {
+  move(plusPoint.value).duration(800).y(-100).set('opacity', '1').ease('in').end(() => {
+    move(plusPoint.value).duration(400).y(-150).set('opacity', '0').ease('out').end(() => {
+      setTimeout(() => {
+        plusPoint.value.removeAttribute('style')
+      }, 300)
+
+    })
+  })
+}
 const roll = () => {
-  canRoll.value = false
+  //canRoll.value = false
   leftRollCount.value--
-  move(circleEle.value).duration(2000).rotate(1440).ease('in-out')
+  move(circleEle.value).duration(1200).rotate(360 * 10).ease('in')
+    .scale(1)
     .end(() => {
-      circleEle.value.removeAttribute('style')
+      // plus 100
+      move(plusPoint.value).duration(800).y(-100).set('opacity', '1').ease('in').end(() => {
+        move(plusPoint.value).duration(400).y(-150).set('opacity', '0').ease('out').end(() => {
+          setTimeout(() => {
+            plusPoint.value.removeAttribute('style')
+          }, 300)
+
+        })
+      })
+
+      move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').scale(1).end(() => {
+      })
+      /* circleEle.value.removeAttribute('style')
       eyeOn.value = true
       if (leftRollCount.value > 0) {
         canRoll.value = true
-      }
+      } */
     });
   console.log(circleEle.value)
 }
@@ -30,9 +55,7 @@ const roll = () => {
 
 <template>
   <div class="main-container">
-    <div class="iphone-x-light-default">
-
-    </div>
+    <div class="iphone-x-light-default"></div>
     <div class="nav">
       <div class="nav-2">
         <div class="internet">
@@ -45,11 +68,12 @@ const roll = () => {
         </div>
       </div>
     </div>
-    <div class="level flexCenter">
+    <div class="level flexCenter" @click="test">
       <span class="zero">10</span><span class="level-0">Level 0</span>
     </div>
 
     <div class="circleEye">
+      <div class="plusPoint" ref="plusPoint">+100</div>
       <div class="combine" ref="circleEle">
         <div class="openEye">
           <img class="open" src="../assets/images/eyeOpen.png" alt="" v-if="eyeOn">
@@ -98,6 +122,14 @@ const roll = () => {
 /* .combine {
   --animate-duration: 3.5s;
 } */
+.plusPoint {
+  position: absolute;
+  z-index: 65;
+  top: calc(224 * var(--rpx));
+  opacity: 0;
+  right: calc(75 * var(--rpx));
+  font-size: calc(22 * var(--rpx))
+}
 
 .combine {
   display: flex;

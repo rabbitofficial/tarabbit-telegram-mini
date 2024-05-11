@@ -10,4 +10,5 @@ body {
     margin: 0;
     font-family: Lato, var(--default-font-family);
     font-size: calc(16 * var(--rpx));
+    color: white;
 }
