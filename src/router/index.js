@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import FortuneView from "@/views/FortuneView.vue";
 import FortuneFlipView from "@/views/FortuneFlipView.vue";
 import InviteFriendView from "@/views/InviteFriendView.vue";
+import OtherTopicsView from "@/views/OtherTopicsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,11 @@ const router = createRouter({
       path: "/inviteFriend",
       name: "inviteFriend",
       component: InviteFriendView,
+    },
+    {
+      path: "/otherTopics",
+      name: "otherTopics",
+      component: OtherTopicsView,
     },
     {
       path: "/about",

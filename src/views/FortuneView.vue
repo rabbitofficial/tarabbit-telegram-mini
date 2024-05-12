@@ -1,15 +1,24 @@
 <script setup>
 import GenFill from '../assets/images/genFill.svg';
 import { onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
 import _ from 'underscore'
+import helper from '@/utils/helper';
 
+const router = useRouter()
+const route = useRoute()
 const cardDoms = []
 
+helper.test()
 const setItemRefs = (el, item) => {
   cardDoms.push({
     id: item,
     el,
   })
+}
+
+const navicatePage = (page) => {
+  router.push(`/${page}`)
 }
 
 function getRandomInRange(from, to, fixed) {
@@ -69,7 +78,7 @@ const shuffle = () => {
         <div class="cards"></div>
         <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
       </button>
-      <span class="otherTopics">Other topics</span>
+      <span class="otherTopics" @click="navicatePage('otherTopics')">Other topics</span>
     </div>
 
     <div class="shuffleCard flexCenter">
