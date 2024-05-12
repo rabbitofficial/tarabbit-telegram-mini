@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import FortuneView from "@/views/FortuneView.vue";
 import FortuneFlipView from "@/views/FortuneFlipView.vue";
+import InviteFriendView from "@/views/InviteFriendView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: "/fortuneFlip",
       name: "fortuneFlip",
       component: FortuneFlipView,
+    },
+    {
+      path: "/inviteFriend",
+      name: "inviteFriend",
+      component: InviteFriendView,
     },
     {
       path: "/about",

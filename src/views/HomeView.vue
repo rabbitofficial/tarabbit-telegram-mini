@@ -102,14 +102,17 @@ const roll = () => {
           </div>
         </router-link>
 
-        <div class="frame-5">
-          <div class="suit-club-fill">
-            <div class="people-fill">
-              <div class="vector-6"></div>
+        <router-link to="/inviteFriend">
+          <div class="frame-5">
+            <div class="suit-club-fill">
+              <div class="people-fill">
+                <div class="vector-6"></div>
+              </div>
             </div>
+            <span class="label-7">Invite <br />Friends</span>
           </div>
-          <span class="label-7">Invite <br />Friends</span>
-        </div>
+        </router-link>
+
       </div>
       <span class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
     </div>
