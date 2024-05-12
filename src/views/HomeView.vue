@@ -9,6 +9,9 @@ const leftRollCount = ref(12)
 
 
 onMounted(() => {
+  const res = window.Telegram.WebApp.initData
+
+  console.log("res213123123", res)
   if (leftRollCount.value > 0) {
     canRoll.value = true
   }
@@ -48,10 +51,11 @@ const roll = () => {
       })
     });
 }
+
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main-container light-gradient">
     <div class="iphone-x-light-default"></div>
     <div class="nav">
       <div class="nav-2">
@@ -66,7 +70,7 @@ const roll = () => {
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">10</span><span class="level-0">Level 0</span>
+      <span class="zero">101</span><span class="level-0">Level 0</span>
     </div>
 
     <div class="circleEye">
@@ -92,7 +96,7 @@ const roll = () => {
       </div>
     </router-link>
 
-    <div class="light-gradient"></div>
+    <!-- <div class="light-gradient"></div> -->
     <div class="atBottom">
       <div class="rectangle">
         <router-link to="/fortune">
@@ -114,7 +118,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
+      <span @click="test()" class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
     </div>
 
   </div>
@@ -223,9 +227,11 @@ const roll = () => {
 
 .atBottom {
   display: flex;
+  height: calc(220* var(--rpx));
   width: 100%;
   position: relative;
   top: calc(8* var(--rpx));
+  box-sizing: border-box;
 }
 
 .main-container {
@@ -247,10 +253,9 @@ button {
 .main-container {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  /* height: 100vh; */
   margin: 0 auto;
   background: #010007;
-  overflow: hidden;
 }
 
 .iphone-x-light-default {
@@ -362,10 +367,9 @@ button {
   position: absolute;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  /* height: 100vh; */
   background: url(../assets/images/bg.svg) no-repeat center;
   background-size: cover;
-  overflow: hidden;
 }
 
 .rectangle {

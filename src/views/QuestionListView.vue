@@ -57,10 +57,10 @@ const questionList = reactive([
 <style scoped>
 .randomQuestion {
   position: absolute;
-  left: -20vw;
+  left: -40vw;
   z-index: 1;
   font-size: calc(22 * var(--rpx));
-  width: 150vw;
+  width: 160vw;
   display: flex;
   flex-wrap: wrap;
 }
