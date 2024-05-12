@@ -5,6 +5,7 @@ import FortuneFlipView from "@/views/FortuneFlipView.vue";
 import InviteFriendView from "@/views/InviteFriendView.vue";
 import OtherTopicsView from "@/views/OtherTopicsView.vue";
 import BoostView from "@/views/BoostView.vue";
+import QuestionListView from "@/views/QuestionListView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: "/boost",
       name: "boost",
       component: BoostView,
+    },
+    {
+      path: "/questionList",
+      name: "questionList",
+      component: QuestionListView,
     },
     {
       path: "/about",
