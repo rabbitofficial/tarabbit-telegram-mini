@@ -1,12 +1,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n({ useScope: 'global' })
+//https://vue-i18n.intlify.dev/guide/advanced/composition.html
 const circleEle = ref(null);
 const plusPoint = ref(null);
 const eyeOn = ref(false)
 const canRoll = ref(true)
 const leftRollCount = ref(12)
 
+
+//locale.value = 'en'
+const changeLang = () => {
+  locale.value = 'ja1'
+}
 
 onMounted(() => {
   const res = window.Telegram.WebApp.initData
@@ -63,14 +70,14 @@ const roll = () => {
           <div class="iconLeft">
             <img src="../assets/images/lang.svg" alt="" style="visibility: hidden;">
           </div>
-          <div class="iconRight">
+          <div class="iconRight" @click="changeLang()">
             <img src="../assets/images/lang.svg" alt="">
           </div>
         </div>
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">101</span><span class="level-0">Level 0</span>
+      <span class="zero">101</span><span class="level-0">Level 0 {{ t("message.hello") }}</span>
     </div>
 
     <div class="circleEye">
