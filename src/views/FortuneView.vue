@@ -1,6 +1,6 @@
 <script setup>
 import GenFill from '../assets/images/genFill.svg';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import _ from 'underscore'
 import helper from '@/utils/helper';
@@ -8,7 +8,7 @@ import helper from '@/utils/helper';
 const router = useRouter()
 const route = useRoute()
 const cardDoms = []
-
+const canClick = ref(true)
 helper.test()
 const setItemRefs = (el, item) => {
   cardDoms.push({
@@ -33,6 +33,7 @@ const resetDefault = (dom) => {
 }
 
 const shuffle = () => {
+  canClick.value = false
   cardDoms.forEach((item, index) => {
     const myMoveObj = move(item.el);
     //myMoveObj.duration(300).translate(getRandomInRange(-200, 200, 2), getRandomInRange(-200, 200, 2)).skew(getRandomInRange(-100, 100, 2)).rotate(getRandomInRange(-1100, 1100, 2)).ease('snap').end(() => {
@@ -44,13 +45,11 @@ const shuffle = () => {
         resetDefault(item.el)
       })
     })
-
-    /* setTimeout(() => {
-      myMoveObj.duration(500).translate(0, 0).scale(1).end(() => {
-        resetDefault(item.el)
-      })
-    }, 500) */
   })
+
+  setTimeout(() => {
+    navicatePage('fortuneFlip')
+  }, 2000)
 }
 
 </script>
@@ -78,7 +77,7 @@ const shuffle = () => {
         <div class="cards"></div>
         <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
       </button>
-      <span class="otherTopics" @click="navicatePage('otherTopics')">Other topics</span>
+      <span class="otherTopics" @click="navicatePage('questionList')">Other topics</span>
     </div>
 
     <div class="shuffleCard flexCenter">
@@ -87,7 +86,7 @@ const shuffle = () => {
       <img :src="GenFill" alt="" v-for="(item, index) in 12" :key="index" :ref="(el) => setItemRefs(el, item)"
         :style="{ left: 'calc(' + (index + 1) * 6 + ' * var(--rpx))' }">
     </div>
-    <div class="bottonText flexCenter" @click="shuffle()">
+    <div class="bottonText flexCenter" @click="canClick && shuffle()">
       <div class="bottomButton">
         <span class="content">Shuffle Cards</span>
       </div>
@@ -114,13 +113,13 @@ const shuffle = () => {
 .shuffleCard {
   width: 100%;
   position: relative;
-  margin-top: calc(100 * var(--rpx));
+  margin-top: calc(60 * var(--rpx));
   left: calc(100 * var(--rpx));
 }
 
 .shuffleCard img {
   z-index: 52;
-  width: calc(160 * var(--rpx));
+  width: calc(130 * var(--rpx));
   object-fit: contain;
   box-sizing: border-box;
   border: calc(1 * var(--rpx)) solid #141414;
@@ -131,7 +130,7 @@ const shuffle = () => {
 
 .bottonText {
   position: absolute;
-  bottom: calc(100 * var(--rpx));
+  bottom: calc(50 * var(--rpx));
   width: 100%;
 }
 
@@ -208,6 +207,7 @@ const shuffle = () => {
   margin-top: calc(18 * var(--rpx));
   margin-right: calc(30 * var(--rpx));
   align-self: flex-end;
+  cursor: pointer;
 }
 
 .level {

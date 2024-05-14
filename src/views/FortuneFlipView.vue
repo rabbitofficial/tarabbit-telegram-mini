@@ -3,6 +3,12 @@ import heartFill from '../assets/images/heartFill.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
 import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
+const navicatePage = (page) => {
+  router.push(`/${page}`)
+}
 
 const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
@@ -21,6 +27,10 @@ const flipCard = () => {
   move(flip2back.value).rotateY(0).end(() => {
     //resetDefault(flip2.value)
   })
+}
+
+const checkResult = () => {
+
 }
 </script>
 
@@ -53,22 +63,22 @@ const flipCard = () => {
     <div class="shuffleCard flexCenter">
       <div class="cardWrap">
         <img :src="heartFill" alt="" ref="flip1">
-        <div class="flexCenter backCard1" ref="flip1back"></div>
+        <!-- <div class="flexCenter backCard1" ref="flip1back"></div> -->
       </div>
       <div class="cardWrap">
         <img :src="hatFill" alt="" ref="flip2">
-        <div class="flexCenter backCard2" ref="flip2back">123</div>
+        <!-- <div class="flexCenter backCard2" ref="flip2back">123</div> -->
       </div>
 
       <div class="cardWrap">
         <img :src="moneyFill" alt="" ref="flip3">
-        <div class="flexCenter backCard3" ref="flip3back"></div>
+        <!-- <div class="flexCenter backCard3" ref="flip3back"></div> -->
       </div>
 
 
 
     </div>
-    <div class="bottonText flexCenter" @click="flipCard()">
+    <div class="bottonText flexCenter" @click="navicatePage('result')">
       <div class="bottomButton">
         <span class="content">Flip Cards -50</span>
       </div>
@@ -132,7 +142,7 @@ const flipCard = () => {
 
 .bottonText {
   position: absolute;
-  bottom: calc(100 * var(--rpx));
+  bottom: calc(50 * var(--rpx));
   width: 100%;
 }
 

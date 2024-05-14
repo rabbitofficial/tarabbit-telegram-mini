@@ -3,6 +3,12 @@ import heartFill from '../assets/images/heartFill.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
 import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
+const navicatePage = (page) => {
+  router.push(`/${page}`)
+}
 
 const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
@@ -53,16 +59,16 @@ const flipCard = () => {
     <div class="shuffleCard flexCenter">
       <div class="cardWrap">
         <img :src="heartFill" alt="" ref="flip1">
-        <div class="flexCenter backCard1" ref="flip1back"></div>
+        <!-- <div class="flexCenter backCard1" ref="flip1back"></div> -->
       </div>
       <div class="cardWrap">
         <img :src="hatFill" alt="" ref="flip2">
-        <div class="flexCenter backCard2" ref="flip2back">123</div>
+        <!-- <div class="flexCenter backCard2" ref="flip2back">123</div> -->
       </div>
 
       <div class="cardWrap">
         <img :src="moneyFill" alt="" ref="flip3">
-        <div class="flexCenter backCard3" ref="flip3back"></div>
+        <!-- <div class="flexCenter backCard3" ref="flip3back"></div> -->
       </div>
     </div>
 
@@ -81,7 +87,7 @@ const flipCard = () => {
         In love, in work, and treasures fine, The cards reveal a fate divine.
       </div>
     </div>
-    <div class="otherTopic flexCenter" @click="flipCard()">
+    <div class="otherTopic flexCenter" @click="navicatePage('questionList')">
       <div class="otherButton">
         <span class="content">Other Topics</span>
       </div>
@@ -89,16 +95,18 @@ const flipCard = () => {
 
     <div class="atBottom">
       <div class="rectangle">
-        <div class="frame-1">
-          <div class="suit-club-fill">
-            <div class="people-fill">
-              <div class="vector-1"></div>
+        <router-link to="/">
+          <div class="frame-1">
+            <div class="suit-club-fill">
+              <div class="people-fill">
+                <div class="vector-1"></div>
+              </div>
             </div>
+            <span class="label-7">Earn <br />Token</span>
           </div>
-          <span class="label-7">Earn <br />Token</span>
-        </div>
+        </router-link>
 
-        <router-link to="/fortune">
+        <router-link to="/boost">
           <div class="frame-3">
             <div class="cards-4"></div>
             <span class="label">Boosts <br />Fortunes</span>

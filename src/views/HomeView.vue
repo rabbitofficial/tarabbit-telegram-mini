@@ -94,7 +94,7 @@ const roll = () => {
         <img src="../assets/images/hand.png" alt="">
       </div>
     </div>
-    <router-link to="/fortuneFlip">
+    <router-link to="/fortune">
       <div class="middleText">
         <button class="cta-with-icon">
           <div class="cards"></div>
@@ -106,7 +106,7 @@ const roll = () => {
     <!-- <div class="light-gradient"></div> -->
     <div class="atBottom">
       <div class="rectangle">
-        <router-link to="/fortune">
+        <router-link to="/boost">
           <div class="frame-3">
             <div class="cards-4"></div>
             <span class="label">Boosts <br />Fortunes</span>
@@ -262,7 +262,7 @@ button {
   width: 100vw;
   /* height: 100vh; */
   margin: 0 auto;
-  background: #010007;
+  /* background: #010007; */
 }
 
 .iphone-x-light-default {

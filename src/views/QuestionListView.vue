@@ -86,7 +86,7 @@ const questionList = reactive([
   font-size: calc(32 * var(--rpx));
   align-items: center;
   justify-content: center;
-  margin: calc(132 * var(--rpx)) 0;
+  margin: calc(60 * var(--rpx)) 0;
 }
 
 .internet {

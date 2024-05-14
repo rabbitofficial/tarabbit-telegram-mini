@@ -3,7 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import FortuneView from "@/views/FortuneView.vue";
 import FortuneFlipView from "@/views/FortuneFlipView.vue";
 import InviteFriendView from "@/views/InviteFriendView.vue";
-import OtherTopicsView from "@/views/OtherTopicsView.vue";
+import ResultView from "@/views/ResultView.vue";
 import BoostView from "@/views/BoostView.vue";
 import QuestionListView from "@/views/QuestionListView.vue";
 
@@ -31,9 +31,9 @@ const router = createRouter({
       component: InviteFriendView,
     },
     {
-      path: "/otherTopics",
-      name: "otherTopics",
-      component: OtherTopicsView,
+      path: "/result",
+      name: "result",
+      component: ResultView,
     },
     {
       path: "/boost",
