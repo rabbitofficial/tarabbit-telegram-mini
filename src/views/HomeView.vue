@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n'
+import Loading from '@/components/Loading.vue';
 const { t, locale } = useI18n({ useScope: 'global' })
 //https://vue-i18n.intlify.dev/guide/advanced/composition.html
 const circleEle = ref(null);
@@ -8,7 +9,7 @@ const plusPoint = ref(null);
 const eyeOn = ref(false)
 const canRoll = ref(true)
 const leftRollCount = ref(12)
-
+const showLoading = ref(true)
 
 //locale.value = 'en'
 const changeLang = () => {
@@ -16,9 +17,10 @@ const changeLang = () => {
 }
 
 onMounted(() => {
-  const res = window.Telegram.WebApp.initData
+  //const res = window.Telegram.WebApp.initData
+  showLoading.value = false
 
-  console.log("res213123123", res)
+  //console.log("res21312312355", tg.initData)
   if (leftRollCount.value > 0) {
     canRoll.value = true
   }
@@ -62,6 +64,7 @@ const roll = () => {
 </script>
 
 <template>
+  <Loading :display="showLoading"></Loading>
   <div class="main-container light-gradient">
     <div class="iphone-x-light-default"></div>
     <div class="nav">
@@ -77,7 +80,8 @@ const roll = () => {
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">101</span><span class="level-0">Level 0 {{ t("message.hello") }}</span>
+      <!-- <span class="zero">101</span><span class="level-0">Level 0 {{ t("message.hello") }}</span> -->
+      <span class="zero">101</span><span class="level-0">Level 0</span>
     </div>
 
     <div class="circleEye">
@@ -125,7 +129,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span @click="test()" class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
+      <span class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
     </div>
 
   </div>

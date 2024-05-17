@@ -1,6 +1,7 @@
-window.Telegram.WebApp.BackButton.isVisible = true;
+const tg = window.Telegram.WebApp;
 
-window.Telegram.WebApp.BackButton.onClick(() => {
+tg.BackButton.isVisible = true;
+
+tg.BackButton.onClick(() => {
   window.history.go(-1);
-  console.log(123);
 });
