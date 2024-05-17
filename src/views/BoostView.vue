@@ -9,7 +9,7 @@
       <div class="nav-2">
         <div class="internet">
           <div class="iconLeft">
-            <img src="../assets/images/arrowLeft.svg" alt="">
+            <img src="../assets/images/arrowLeft.svg" alt="" style="visibility: hidden;">
           </div>
           <div class="iconRight">
             <img src="../assets/images/lang.svg" alt="" style="visibility: hidden;">
@@ -171,7 +171,7 @@
 
 .bottonText {
   position: absolute;
-  bottom: calc(100 * var(--rpx));
+  bottom: calc(50 * var(--rpx));
   width: 100%;
 }
 

@@ -57,13 +57,13 @@ import { ref } from 'vue';
 }
 
 .friendNum {
-  margin-top: calc(60 * var(--rpx));
+  margin-top: calc(30 * var(--rpx));
   font-size: calc(40 * var(--rpx));
   font-weight: bold;
 }
 
 .friendImg {
-  margin-top: calc(100 * var(--rpx));
+  margin-top: calc(40 * var(--rpx));
 }
 
 .friendImg img {
@@ -73,12 +73,12 @@ import { ref } from 'vue';
 .friendControl {
   width: 90%;
   box-sizing: border-box;
-  margin-top: calc(80 * var(--rpx));
+  margin-top: calc(50 * var(--rpx));
   background: rgba(255, 255, 255, 0.2);
   border: calc(1 * var(--rpx)) solid #FFFFFF;
   box-shadow: 0 calc(6 * var(--rpx)) calc(10 * var(--rpx)) rgba(120, 120, 120, 0.1);
   border-radius: calc(16 * var(--rpx));
-  height: calc(134 * var(--rpx))
+  height: calc(120 * var(--rpx))
 }
 
 .friendControl {
@@ -120,7 +120,7 @@ import { ref } from 'vue';
 
 .bottonText {
   position: absolute;
-  bottom: calc(100 * var(--rpx));
+  bottom: calc(50 * var(--rpx));
   width: 100%;
 }
 
