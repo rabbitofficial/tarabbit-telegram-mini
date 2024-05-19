@@ -7,18 +7,32 @@ import { useRouter, useRoute } from 'vue-router'
 import helper from '@/utils/helper';
 import Loading from '@/components/Loading.vue';
 import axios from 'axios';
+import _ from 'underscore'
+
 const router = useRouter()
 const route = useRoute()
 const navicatePage = (page) => {
   router.push(`/${page}`)
 }
 
+const allCards = import.meta.glob("@/assets/cards/*.svg", { eager: true });
 const cardList = reactive({ list: [] })
+const cardRandomList = helper.getRamdomCard(3)
+let cardResultList = []
+_.each(allCards, (v, k) => {
+  cardResultList.push({
+    [k.replace(/(.*\/)*([^.]+)/i, "$2").replace('.svg', '')]: v.default
+  })
+})
 
+cardResultList = _.filter(cardResultList, item => {
+  return cardRandomList.includes(_.keys(item)[0])
+})
+
+cardResultList = _.map(cardResultList, (obj) => _.values(obj)[0]);
+
+cardList.list = cardResultList
 onMounted(() => {
-  console.log(helper.getRamdomCard(3))
-  console.log(helper.getDefaultCards())
-  cardList.list = helper.getRamdomCard(3)
 })
 const showLoading = ref(false)
 const resetDefault = (dom) => {

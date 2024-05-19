@@ -1,7 +1,6 @@
 const getCard = (combo) => {
-  const myurl = `/src/assets/cards/${combo}.svg`;
-  return new URL(myurl, import.meta.url).href;
-  //return myurl;
+  const myurl = `@/assets/cards/${combo}.svg`;
+  return combo;
 };
 
 const cardList = [
@@ -55,12 +54,11 @@ const getDefaultCards = () => {
 };
 
 const helper = {
-  test: () => {
-    console.log(123123213);
-  },
+  test: () => {},
   baseUrl: "https://taapi.cvgo.vip/",
   getRamdomCard,
   getDefaultCards,
+  getCard,
 };
 
 export default helper;

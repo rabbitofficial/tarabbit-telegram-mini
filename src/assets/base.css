@@ -27,4 +27,6 @@ a{
     height: 100vh;
     background: url(../assets/images/bg.svg) no-repeat center;
     background-size: cover;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
