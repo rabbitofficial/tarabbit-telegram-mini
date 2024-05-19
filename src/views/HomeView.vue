@@ -3,6 +3,8 @@ import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n'
 import Loading from '@/components/Loading.vue';
 const { t, locale } = useI18n({ useScope: 'global' })
+import helper from '@/utils/helper';
+import axios from 'axios';
 //https://vue-i18n.intlify.dev/guide/advanced/composition.html
 const circleEle = ref(null);
 const plusPoint = ref(null);
@@ -26,6 +28,24 @@ onMounted(() => {
   }
 });
 
+const testNetwork = async () => {
+  console.log(123123)
+  //const result = await axios.post(helper.baseUrl + 'fortune/check-my-fortune', 
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: helper.baseUrl + 'fortune/check-my-fortune',
+    data: JSON.stringify({
+      "userId": "123456",
+      "tarotCards": ["The Fool", "The Magician", "The High Priestess"],
+      "query": "Can you please share some guidance to me in 6 months?"
+    })
+  })
+
+  console.log("result", result)
+}
 // plus 100 test
 const test = () => {
   move(plusPoint.value).duration(800).y(-100).set('opacity', '1').ease('in').end(() => {
@@ -129,7 +149,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span class="number">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
+      <span class="number" @click="testNetwork()">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
     </div>
 
   </div>

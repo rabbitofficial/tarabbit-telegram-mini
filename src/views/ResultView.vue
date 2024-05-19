@@ -2,20 +2,65 @@
 import heartFill from '../assets/images/heartFill.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
-import { ref } from 'vue';
+import { reactive, ref, toRaw, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
+import helper from '@/utils/helper';
+import Loading from '@/components/Loading.vue';
+import axios from 'axios';
 const router = useRouter()
 const route = useRoute()
 const navicatePage = (page) => {
   router.push(`/${page}`)
 }
 
+const cardList = reactive({ list: [] })
+
+onMounted(() => {
+  console.log(helper.getRamdomCard(3))
+  console.log(helper.getDefaultCards())
+  cardList.list = helper.getRamdomCard(3)
+})
+const showLoading = ref(false)
 const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
   dom.style['transform'] = ''
 }
 const flip2 = ref(null)
 const flip2back = ref(null)
+
+const queryContent = reactive({
+  "userId": "123456",
+  "tarotCards": ["The Fool", "The Magician", "The High Priestess"],
+  "query": "Can you please share some guidance to me in 6 months?"
+})
+const resultTime = ref(new Date().toTimeString())
+const tarotResult = ref(`In love's embrace, the Lovers dance, A bond of souls in sweet romance. New paths in career now unfold, The Ace
+        of Pentacles, treasures untold.
+        
+        Amidst the coins, the Ten does gleam, A wealth of fortune, like a dream. In love, in work, and treasures fine,
+        The cards reveal a fate divine.
+       
+        Amidst the coins, the Ten does gleam, A wealth of fortune, like a dream. In love, in work, and treasures fine,
+        The cards reveal a fate divine.
+        
+        In love, in work, and treasures fine, The cards reveal a fate divine.`)
+
+const testNetwork = async () => {
+  showLoading.value = true
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: helper.baseUrl + 'fortune/check-my-fortune',
+    data: JSON.stringify(toRaw(queryContent))
+  })
+  showLoading.value = false
+  tarotResult.value = result.data.fortune
+  resultTime.value = new Date().toTimeString()
+  console.log("result", result)
+  //console.log(toRaw(queryContent))
+}
 
 const flipCard = () => {
   move(flip2.value).rotateY(180).then(() => {
@@ -31,6 +76,7 @@ const flipCard = () => {
 </script>
 
 <template>
+  <Loading :display="showLoading"></Loading>
   <div class="main-container light-gradient">
     <div class="iphone-x-light-default"></div>
 
@@ -49,42 +95,41 @@ const flipCard = () => {
     </div>
 
     <div class="middleText">
-      <button class="cta-with-icon">
+      <button class="cta-with-icon" @click="testNetwork()">
         <div class="cards"></div>
-        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
+        <!-- <span class="whats-my-fortune-today">What’s My Fortune Today?</span> -->
+        <span class="whats-my-fortune-today">test result</span>
       </button>
+      <input type="text" placeholder="input content1" v-model="queryContent.tarotCards[0]" />
+      <input type="text" placeholder="input content2" v-model="queryContent.tarotCards[1]" />
+      <input type="text" placeholder="input content3" v-model="queryContent.tarotCards[2]" />
+      <input type="text" placeholder="input question" v-model="queryContent.query" />
       <!-- <span class="otherTopics">Other topics</span> -->
     </div>
 
     <div class="shuffleCard flexCenter">
-      <div class="cardWrap">
+      <div class="cardWrap" v-for="(item, index) in cardList.list" :key="index">
+        <img :src="item" alt="">
+      </div>
+      <!-- <div class="cardWrap">
         <img :src="heartFill" alt="" ref="flip1">
-        <!-- <div class="flexCenter backCard1" ref="flip1back"></div> -->
+        <div class="flexCenter backCard1" ref="flip1back"></div>
       </div>
       <div class="cardWrap">
         <img :src="hatFill" alt="" ref="flip2">
-        <!-- <div class="flexCenter backCard2" ref="flip2back">123</div> -->
+        <div class="flexCenter backCard2" ref="flip2back">123</div>
       </div>
 
       <div class="cardWrap">
         <img :src="moneyFill" alt="" ref="flip3">
-        <!-- <div class="flexCenter backCard3" ref="flip3back"></div> -->
-      </div>
+        <div class="flexCenter backCard3" ref="flip3back"></div>
+      </div> -->
     </div>
 
     <div class="textContent">
-      <div class="time">2024-05-08 11:10</div>
+      <div class="time">{{ resultTime }}</div>
       <div class="middleTextContent">
-        In love's embrace, the Lovers dance, A bond of souls in sweet romance. New paths in career now unfold, The Ace
-        of Pentacles, treasures untold.
-        <br>
-        Amidst the coins, the Ten does gleam, A wealth of fortune, like a dream. In love, in work, and treasures fine,
-        The cards reveal a fate divine.
-        <br>
-        Amidst the coins, the Ten does gleam, A wealth of fortune, like a dream. In love, in work, and treasures fine,
-        The cards reveal a fate divine.
-        <br>
-        In love, in work, and treasures fine, The cards reveal a fate divine.
+        {{ tarotResult }}
       </div>
     </div>
     <div class="otherTopic flexCenter" @click="navicatePage('questionList')">
@@ -131,6 +176,10 @@ const flipCard = () => {
 </template>
 
 <style scoped>
+.middleText input {
+  margin-top: 10px;
+}
+
 .main-container {
   padding-bottom: calc(70* var(--rpx));
 }
