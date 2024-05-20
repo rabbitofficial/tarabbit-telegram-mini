@@ -59,6 +59,7 @@ const helper = {
   getRamdomCard,
   getDefaultCards,
   getCard,
+  getRandomNumber,
 };
 
 export default helper;

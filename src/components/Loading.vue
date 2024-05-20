@@ -4,13 +4,13 @@ const props = defineProps(['display'])
 const { display } = toRefs(props)
 </script>
 <template>
-    <div class="loading" :style="{ 'display': display ? 'block' : 'none' }">Loading&#8230;</div>
+    <div class="loading" :style="{ 'visibility': display ? 'visible' : 'hidden' }">Loading&#8230;</div>
 </template>
 
 <style>
 /* Absolute Center Spinner */
 .loading {
-    display: none;
+    visibility: hidden;
     position: fixed;
     z-index: 999;
     height: 2em;

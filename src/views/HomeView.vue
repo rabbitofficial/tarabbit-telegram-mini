@@ -19,6 +19,9 @@ const changeLang = () => {
 }
 
 onMounted(() => {
+  let startParam = window.Telegram.WebApp.initDataUnsafe.start_param
+
+  console.log(startParam)
   //const res = window.Telegram.WebApp.initData
   showLoading.value = false
 

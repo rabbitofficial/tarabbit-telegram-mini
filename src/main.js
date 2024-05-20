@@ -6,8 +6,8 @@ import router from "./router";
 import "@/utils/tgGlobalSetting";
 import i18nData from "@/i18n/i18n";
 //for dev
-//import eruda from "eruda";
-//eruda.init();
+import eruda from "eruda";
+eruda.init();
 
 const i18n = createI18n(i18nData);
 //import "animate.css";

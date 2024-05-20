@@ -1,21 +1,20 @@
 <script setup>
-import heartFill from '../assets/images/heartFill.svg';
-import hatFill from '../assets/images/hatFill.svg';
-import moneyFill from '../assets/images/moneyFill.svg';
+import emptyCard from '../assets/images/emptyCard.svg';
+import tarotData from '../assets/json/tarot.json';
 import { reactive, ref, toRaw, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import helper from '@/utils/helper';
 import Loading from '@/components/Loading.vue';
 import axios from 'axios';
-import _ from 'underscore'
-
+import _ from 'underscore';
 const router = useRouter()
 const route = useRoute()
 const navicatePage = (page) => {
   router.push(`/${page}`)
 }
-
-const allCards = import.meta.glob("@/assets/cards/*.svg", { eager: true });
+const resultListRender = reactive({ data: [] })
+/* poker logic */
+/* const allCards = import.meta.glob("@/assets/cards/*.svg", { eager: true }); 
 const cardList = reactive({ list: [] })
 const cardRandomList = helper.getRamdomCard(3)
 let cardResultList = []
@@ -24,18 +23,13 @@ _.each(allCards, (v, k) => {
     [k.replace(/(.*\/)*([^.]+)/i, "$2").replace('.svg', '')]: v.default
   })
 })
-
 cardResultList = _.filter(cardResultList, item => {
   return cardRandomList.includes(_.keys(item)[0])
 })
-
 cardResultList = _.map(cardResultList, (obj) => _.values(obj)[0]);
-
-cardList.list = cardResultList
-onMounted(() => {
-})
+cardList.list = cardResultList */
 const showLoading = ref(false)
-const resetDefault = (dom) => {
+/* const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
   dom.style['transform'] = ''
 }
@@ -44,22 +38,13 @@ const flip2back = ref(null)
 
 const queryContent = reactive({
   "userId": "123456",
-  "tarotCards": ["The Fool", "The Magician", "The High Priestess"],
+  "tarotCards": ["The Fool upright", "The Magician reserved", "The High Priestess"],
   "query": "Can you please share some guidance to me in 6 months?"
-})
+}) */
 const resultTime = ref(new Date().toTimeString())
-const tarotResult = ref(`In love's embrace, the Lovers dance, A bond of souls in sweet romance. New paths in career now unfold, The Ace
-        of Pentacles, treasures untold.
-        
-        Amidst the coins, the Ten does gleam, A wealth of fortune, like a dream. In love, in work, and treasures fine,
-        The cards reveal a fate divine.
-       
-        Amidst the coins, the Ten does gleam, A wealth of fortune, like a dream. In love, in work, and treasures fine,
-        The cards reveal a fate divine.
-        
-        In love, in work, and treasures fine, The cards reveal a fate divine.`)
+const tarotResult = ref(`Loading...`)
 
-const testNetwork = async () => {
+const loadTarotData = async () => {
   showLoading.value = true
   const result = await axios({
     headers: {
@@ -67,16 +52,45 @@ const testNetwork = async () => {
     },
     method: 'post',
     url: helper.baseUrl + 'fortune/check-my-fortune',
-    data: JSON.stringify(toRaw(queryContent))
+    data: JSON.stringify({
+      "userId": "123456",
+      "tarotCards": _.pluck(resultListRender.data, 'query'),
+      "query": "Can you please share some guidance to me in 6 months?"
+    })
   })
   showLoading.value = false
   tarotResult.value = result.data.fortune
   resultTime.value = new Date().toTimeString()
-  console.log("result", result)
-  //console.log(toRaw(queryContent))
 }
 
-const flipCard = () => {
+const randomTarot = () => {
+  //const resultList = []
+  const cardNumberList = []
+  let count = 0
+
+  while (count < 3) {
+    const randomNumber = helper.getRandomNumber(0, 77)
+    if (!cardNumberList.includes(randomNumber)) {
+      count++
+      cardNumberList.push([randomNumber, helper.getRandomNumber(0, 1)])
+    }
+  }
+
+  cardNumberList.forEach(item => {
+    resultListRender.data.push({
+      query: tarotData.tarot[item[0]].name + (item[1] == 0 ? ' upright' : ' reserved'),
+      display: tarotData.tarot[item[0]].name,
+      isReversed: item[1] == 1
+    })
+  })
+
+  loadTarotData()
+}
+
+onMounted(() => {
+  randomTarot()
+})
+/* const flipCard = () => {
   move(flip2.value).rotateY(180).then(() => {
 
   }).end(() => {
@@ -86,7 +100,7 @@ const flipCard = () => {
   move(flip2back.value).rotateY(0).end(() => {
     //resetDefault(flip2.value)
   })
-}
+} */
 </script>
 
 <template>
@@ -109,22 +123,27 @@ const flipCard = () => {
     </div>
 
     <div class="middleText">
-      <button class="cta-with-icon" @click="testNetwork()">
+      <button class="cta-with-icon">
         <div class="cards"></div>
         <!-- <span class="whats-my-fortune-today">What’s My Fortune Today?</span> -->
-        <span class="whats-my-fortune-today">test result</span>
+        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
       </button>
-      <input type="text" placeholder="input content1" v-model="queryContent.tarotCards[0]" />
-      <input type="text" placeholder="input content2" v-model="queryContent.tarotCards[1]" />
-      <input type="text" placeholder="input content3" v-model="queryContent.tarotCards[2]" />
-      <input type="text" placeholder="input question" v-model="queryContent.query" />
+      <!-- <input type="text" placeholder="input content" v-model="resultListRender?.data[index].query"
+        v-for="(item, index) in resultListRender.data" :key="index" /> -->
       <!-- <span class="otherTopics">Other topics</span> -->
     </div>
 
     <div class="shuffleCard flexCenter">
-      <div class="cardWrap" v-for="(item, index) in cardList.list" :key="index">
-        <img :src="item" alt="">
+      <div class="cardWrap" v-for="(item, index) in 3" :key="index">
+        <img :src="emptyCard" alt="">
       </div>
+      <div class="cardContent1" :style="{ transform: `rotate(${resultListRender.data[0]?.isReversed ? 180 : 0}deg)` }">
+        {{
+          resultListRender.data[0]?.display }}</div>
+      <div class="cardContent2" :style="{ transform: `rotate(${resultListRender.data[1]?.isReversed ? 180 : 0}deg)` }">
+        {{ resultListRender.data[1]?.display }}</div>
+      <div class="cardContent3" :style="{ transform: `rotate(${resultListRender.data[2]?.isReversed ? 180 : 0}deg)` }">
+        {{ resultListRender.data[2]?.display }}</div>
       <!-- <div class="cardWrap">
         <img :src="heartFill" alt="" ref="flip1">
         <div class="flexCenter backCard1" ref="flip1back"></div>
@@ -190,6 +209,49 @@ const flipCard = () => {
 </template>
 
 <style scoped>
+.cardContent1 {
+  position: absolute;
+  top: calc(51* var(--rpx));
+  left: calc(64* var(--rpx));
+  z-index: 100;
+  font-size: calc(13* var(--rpx));
+  width: calc(65* var(--rpx));
+  height: calc(50* var(--rpx));
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  /* transform: rotate(180deg); */
+}
+
+.cardContent2 {
+  position: absolute;
+  top: calc(51* var(--rpx));
+  left: calc(185* var(--rpx));
+  z-index: 100;
+  font-size: calc(13* var(--rpx));
+  width: calc(65* var(--rpx));
+  height: calc(50* var(--rpx));
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.cardContent3 {
+  position: absolute;
+  top: calc(51* var(--rpx));
+  right: calc(59* var(--rpx));
+  z-index: 100;
+  font-size: calc(13* var(--rpx));
+  width: calc(65* var(--rpx));
+  height: calc(50* var(--rpx));
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
 .middleText input {
   margin-top: 10px;
 }
