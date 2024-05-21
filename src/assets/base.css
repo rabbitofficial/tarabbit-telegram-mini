@@ -21,10 +21,13 @@ a{
     text-decoration: none;
 }
 
+html {
+    background: linear-gradient(168.43deg, #031728 -10.68%, #3C113F 25.6%, #484A64 62.5%, #52757F 82.66%, #5A9C98 100.61%, #701856 112.31%);
+}
+
 #app{
     display: flex;
     position: relative;
     width: 100vw;
     height:auto;
-    background: linear-gradient(168.43deg, #031728 -10.68%, #3C113F 25.6%, #484A64 62.5%, #52757F 82.66%, #5A9C98 100.61%, #701856 112.31%);
 }
