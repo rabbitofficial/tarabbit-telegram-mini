@@ -156,13 +156,13 @@ button {
   overflow: hidden;
 }
 
-.light-gradient {
+/* .light-gradient {
   position: absolute;
   top: 0;
   width: 100vw;
   height: 100vh;
-  /* background: url(../assets/images/bg.svg) no-repeat center;
+  background: url(../assets/images/bg.svg) no-repeat center;
   background-size: cover;
-  overflow: hidden; */
-}
+  overflow: hidden;
+} */
 </style>

@@ -397,15 +397,15 @@ button {
   z-index: 33;
 }
 
-.light-gradient {
+/* .light-gradient {
   position: absolute;
   top: 0;
   width: 100vw;
-  /* height: 100vh; */
-  /* background: url(../assets/images/bg.svg) no-repeat center;
-  background-size: cover; */
-  background: linear-gradient(168.43deg, #031728 -10.68%, #3C113F 25.6%, #484A64 62.5%, #52757F 82.66%, #5A9C98 100.61%, #701856 112.31%);
-}
+  height: 100vh;
+  background: url(../assets/images/bg.svg) no-repeat center;
+  background-size: cover;
+  z-index: 2;
+} */
 
 .rectangle {
   position: absolute;

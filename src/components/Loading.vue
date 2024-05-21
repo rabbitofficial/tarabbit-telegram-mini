@@ -4,7 +4,9 @@ const props = defineProps(['display'])
 const { display } = toRefs(props)
 </script>
 <template>
-    <div class="loading" :style="{ 'visibility': display ? 'visible' : 'hidden' }">Loading&#8230;</div>
+    <div class="loading"
+        :style="{ 'visibility': display ? 'visible' : 'hidden', 'touchAction': display ? 'none' : 'auto' }">
+        Loading&#8230;</div>
 </template>
 
 <style>

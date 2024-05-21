@@ -258,13 +258,13 @@ button {
   text-shadow: 0 calc(4 * var(--rpx)) calc(4 * var(--rpx)) rgba(0, 0, 0, 0.25);
 }
 
-.light-gradient {
+/* .light-gradient {
   position: absolute;
   top: 0;
   width: 100vw;
   height: 100vh;
-  /* background: url(../assets/images/bg.svg) no-repeat center;
+  background: url(../assets/images/bg.svg) no-repeat center;
   background-size: cover;
-  overflow: hidden; */
-}
+  overflow: hidden;
+} */
 </style>

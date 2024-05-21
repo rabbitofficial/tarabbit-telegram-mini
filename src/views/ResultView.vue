@@ -581,7 +581,7 @@ button {
 
 .main-container {
   width: 100vw;
-  background: #010007;
+  /* background: #010007; */
 }
 
 .iphone-x-light-default {
@@ -642,15 +642,14 @@ button {
   z-index: 33;
 }
 
-.light-gradient {
+/* .light-gradient {
   position: absolute;
   width: 100vw;
   top: 0;
   background: linear-gradient(168.43deg, #031728 -10.68%, #3C113F 25.6%, #484A64 62.5%, #52757F 82.66%, #5A9C98 100.61%, #701856 112.31%);
-
-  /* background: url(../assets/images/bg.svg) no-repeat center;
-  background-size: cover; */
-}
+  background: url(../assets/images/bg.svg) no-repeat center;
+  background-size: cover;
+} */
 
 .vector-6 {
   position: relative;
