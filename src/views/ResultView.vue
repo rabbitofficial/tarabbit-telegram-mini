@@ -42,7 +42,7 @@ const queryContent = reactive({
   "query": "Can you please share some guidance to me in 6 months?"
 }) */
 const resultTime = ref(new Date().toTimeString())
-const tarotResult = ref(`Loading...`)
+const tarotResult = ref(`Certainly! In the next 6 months, it looks like you may encounter some delays or setbacks with the Page of Wands and Seven of Pentacles both being reserved. This could indicate a period of feeling stuck or lacking motivation in pursuing your goals. However, with the World card upright, there is a sense of completion and fulfillment on the horizon. This may suggest that despite the challenges you face in the coming months, you will eventually reach a point of success and achievement. Keep pushing forward and stay focused on your long-term goals. Trust that you have the skills and capabilities to overcome any obstacles that come your way. Remember to stay patient and consistent in your efforts, as your hard work will pay off in the end. Trust in the process and believe in yourself.`)
 
 const loadTarotData = async () => {
   showLoading.value = true
@@ -262,6 +262,7 @@ onMounted(() => {
 
 .middleTextContent {
   line-height: 130%;
+  text-align: justify;
 }
 
 .textContent {
@@ -645,8 +646,10 @@ button {
   position: absolute;
   width: 100vw;
   top: 0;
-  background: url(../assets/images/bg.svg) no-repeat center;
-  background-size: cover;
+  background: linear-gradient(168.43deg, #031728 -10.68%, #3C113F 25.6%, #484A64 62.5%, #52757F 82.66%, #5A9C98 100.61%, #701856 112.31%);
+
+  /* background: url(../assets/images/bg.svg) no-repeat center;
+  background-size: cover; */
 }
 
 .vector-6 {
