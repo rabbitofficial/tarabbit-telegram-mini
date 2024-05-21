@@ -208,7 +208,7 @@ button {
   width: 100vw;
   height: 100vh;
   margin: 0 auto;
-  background: #010007;
+  /* background: #010007; */
   overflow: hidden;
 }
 
@@ -263,8 +263,8 @@ button {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: url(../assets/images/bg.svg) no-repeat center;
+  /* background: url(../assets/images/bg.svg) no-repeat center;
   background-size: cover;
-  overflow: hidden;
+  overflow: hidden; */
 }
 </style>

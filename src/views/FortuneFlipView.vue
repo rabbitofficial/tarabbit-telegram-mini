@@ -253,7 +253,7 @@ button {
   width: 100vw;
   height: 100vh;
   margin: 0 auto;
-  background: #010007;
+  /* background: #010007; */
   overflow: hidden;
 }
 
@@ -320,9 +320,9 @@ button {
   width: 100vw;
   height: 100vh;
   top: 0;
-  background: url(../assets/images/bg.svg) no-repeat center;
+  /* background: url(../assets/images/bg.svg) no-repeat center;
   background-size: cover;
-  overflow: hidden;
+  overflow: hidden; */
 }
 
 .vector-6 {
