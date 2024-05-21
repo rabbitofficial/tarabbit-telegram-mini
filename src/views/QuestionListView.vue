@@ -57,11 +57,11 @@ const questionList = reactive([
 <style scoped>
 .main-container {
   box-sizing: border-box;
+  width: 100%;
+  position: relative;
 }
 
 .randomQuestion {
-  position: absolute;
-  /* left: -40vw; */
   z-index: 1;
   font-size: calc(22 * var(--rpx));
   width: 100%;
@@ -70,7 +70,7 @@ const questionList = reactive([
   flex-direction: column;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0 calc(22 * var(--rpx));
+  padding: 0 calc(22 * var(--rpx)) calc(60 * var(--rpx)) calc(22 * var(--rpx));
   word-break: break-all;
 }
 
