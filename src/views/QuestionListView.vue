@@ -18,7 +18,7 @@ const questionList = reactive([
     title: 'Will I? '
   },
   {
-    title: 'What’s My Fortune Today12312312?'
+    title: 'What’s My Fortune Today?'
   },
   {
     title: 'What’s My Fortay334 34234 ?'
@@ -55,14 +55,23 @@ const questionList = reactive([
 </template>
 
 <style scoped>
+.main-container {
+  box-sizing: border-box;
+}
+
 .randomQuestion {
   position: absolute;
-  left: -40vw;
+  /* left: -40vw; */
   z-index: 1;
   font-size: calc(22 * var(--rpx));
-  width: 160vw;
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 calc(22 * var(--rpx));
+  word-break: break-all;
 }
 
 .subQuestion {
@@ -75,8 +84,8 @@ const questionList = reactive([
   color: #010007;
   background: #FFFFFF;
   border-radius: calc(100 * var(--rpx));
-  margin-right: calc(20 * var(--rpx));
   margin-top: calc(10 * var(--rpx));
+  box-sizing: border-box;
 }
 
 .title {
@@ -136,15 +145,6 @@ select,
 textarea,
 button {
   outline: 0;
-}
-
-.main-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  margin: 0 auto;
-  background: #010007;
-  overflow: hidden;
 }
 
 .iphone-x-light-default {
