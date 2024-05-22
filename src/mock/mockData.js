@@ -43,6 +43,8 @@ const userDB = {
   language_code: "zh-hans",
   joined_community: true,
   joined_X: true,
+  is_premium: false,
+  photo_url: "ssssss/ssss.png",
   update_at: "2024-05-20T12:34:56Z", // when update info, created time
 };
 
