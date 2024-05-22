@@ -104,7 +104,7 @@ const roll = () => {
     </div>
     <div class="level flexCenter" @click="test">
       <!-- <span class="zero">101</span><span class="level-0">Level 0 {{ t("message.hello") }}</span> -->
-      <span class="zero">101</span><span class="level-0">Level 0</span>
+      <span class="zero">0</span><span class="level-0">Level 0</span>
     </div>
 
     <div class="circleEye">
@@ -152,7 +152,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span class="number" @click="testNetwork()">{{ leftRollCount }}</span><span class="label-8">Flips Left</span>
+      <span class="number" @click="testNetwork()">{{ leftRollCount }}</span><span class="label-8">Roll Left</span>
     </div>
 
   </div>

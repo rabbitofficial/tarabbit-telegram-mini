@@ -2,6 +2,8 @@
 import heartFill from '../assets/images/heartFill.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
+import doubleHands from '../assets/images/doubleHands.svg';
+import cross from '../assets/images/cross.svg';
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
@@ -10,6 +12,7 @@ const navicatePage = (page) => {
   router.push(`/${page}`)
 }
 
+const showPopup = ref(false)
 const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
   dom.style['transform'] = ''
@@ -29,6 +32,10 @@ const flipCard = () => {
   })
 }
 
+const checkBalance = () => {
+  showPopup.value = true
+  //navicatePage('result')
+}
 const checkResult = () => {
 
 }
@@ -75,20 +82,82 @@ const checkResult = () => {
         <!-- <div class="flexCenter backCard3" ref="flip3back"></div> -->
       </div>
 
-
-
     </div>
-    <div class="bottonText flexCenter" @click="navicatePage('result')">
+    <div class="bottonText flexCenter" @click="checkBalance()">
       <div class="bottomButton">
         <span class="content">Flip Cards -50</span>
       </div>
     </div>
 
     <div class="light-gradient"></div>
+    <div class="popupBalance" v-if="showPopup">
+      <div class="popupContent">
+        <div>Oops !</div>
+        <div><img :src="doubleHands" alt=""></div>
+        <div>You don’t have enough points</div>
+        <div @click="navicatePage('inviteFriend')"><button>Invite Friends to Earn!</button></div>
+        <div class="cross" @click="showPopup = !showPopup"><img :src="cross" alt="" class="rightCross">
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.popupBalance .cross {
+  position: absolute;
+  top: 0;
+  right: calc(20 * var(--rpx));
+  width: calc(20 * var(--rpx));
+  height: calc(20 * var(--rpx));
+}
+
+.popupBalance .cross .rightCross {
+  width: calc(22 * var(--rpx));
+}
+
+.popupBalance {
+  position: absolute;
+  top: 0;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20 * var(--rpx));
+}
+
+.popupBalance .popupContent img {
+  width: calc(200 * var(--rpx));
+  margin: calc(18 * var(--rpx)) 0;
+}
+
+.popupBalance .popupContent button {
+  height: calc(50 * var(--rpx));
+  background-color: rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+  width: 70vw;
+  border-radius: calc(100 * var(--rpx));
+  color: white;
+  font-size: calc(22 * var(--rpx));
+  margin-top: calc(22 * var(--rpx));
+  border: calc(1 * var(--rpx)) solid white;
+}
+
+.popupBalance .popupContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 75vw;
+  height: 60vh;
+  border-radius: calc(20 * var(--rpx));
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), radial-gradient(84.77% 84.72% at 50% 50%, #E5A59A 0%, #6521AC 100%);
+}
+
 .internet {
   position: relative;
   box-sizing: border-box;
