@@ -41,10 +41,10 @@
       <div class="boostContent">
         <div class="bundleLeft">
           <div class="boostLeft">
-            <img src="../assets/images/avataaars.svg" alt="">
+            <img src="../assets/images/x.svg" alt="">
           </div>
           <div class="boostMiddle">
-            <div class="boostTitle">Join our community </div>
+            <div class="boostTitle">Join our X </div>
             <div class="boostNumber">+1500</div>
           </div>
         </div>
