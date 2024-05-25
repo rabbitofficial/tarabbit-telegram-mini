@@ -69,16 +69,16 @@ const checkResult = () => {
 
     <div class="shuffleCard flexCenter">
       <div class="cardWrap">
-        <img :src="heartFill" alt="" ref="flip1">
+        <img :src="heartFill" alt="" ref="flip1" @click="checkBalance()">
         <!-- <div class="flexCenter backCard1" ref="flip1back"></div> -->
       </div>
       <div class="cardWrap">
-        <img :src="hatFill" alt="" ref="flip2">
+        <img :src="hatFill" alt="" ref="flip2" @click="checkBalance()">
         <!-- <div class="flexCenter backCard2" ref="flip2back">123</div> -->
       </div>
 
       <div class="cardWrap">
-        <img :src="moneyFill" alt="" ref="flip3">
+        <img :src="moneyFill" alt="" ref="flip3" @click="checkBalance()">
         <!-- <div class="flexCenter backCard3" ref="flip3back"></div> -->
       </div>
 
