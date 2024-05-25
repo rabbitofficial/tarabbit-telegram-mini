@@ -84,7 +84,7 @@ const shuffle = () => {
 
       <!-- <img src="../assets/images/cards.svg" alt=""> -->
       <img :src="GenFill" alt="" v-for="(item, index) in 12" :key="index" :ref="(el) => setItemRefs(el, item)"
-        :style="{ left: 'calc(' + (index + 1) * 6 + ' * var(--rpx))' }">
+        :style="{ left: 'calc(' + (index + 1) * 6 + ' * var(--rpx))' }" @click="canClick && shuffle()">
     </div>
     <div class="bottonText flexCenter" @click="canClick && shuffle()">
       <div class="bottomButton">
