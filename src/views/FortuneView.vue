@@ -77,7 +77,7 @@ const shuffle = () => {
         <div class="cards"></div>
         <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
       </button>
-      <span class="otherTopics" @click="navicatePage('questionList')">Other topics</span>
+      <span class="otherTopics" @click="navicatePage('questionList')" v-if="false">Other topics</span>
     </div>
 
     <div class="shuffleCard flexCenter">

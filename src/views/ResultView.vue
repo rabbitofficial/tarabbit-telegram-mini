@@ -165,7 +165,7 @@ onMounted(() => {
         {{ tarotResult }}
       </div>
     </div>
-    <div class="otherTopic flexCenter" @click="navicatePage('questionList')">
+    <div class="otherTopic flexCenter" @click="navicatePage('questionList')" v-if="false">
       <div class="otherButton">
         <span class="content">Other Topics</span>
       </div>

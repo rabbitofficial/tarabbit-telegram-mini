@@ -33,8 +33,8 @@ const flipCard = () => {
 }
 
 const checkBalance = () => {
-  showPopup.value = true
-  //navicatePage('result')
+  //showPopup.value = true
+  navicatePage('result')
 }
 const checkResult = () => {
 
