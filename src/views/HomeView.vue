@@ -293,7 +293,7 @@ button {
 .main-container {
   position: relative;
   width: 100vw;
-  /* height: 100vh; */
+  height: 100vh;
   margin: 0 auto;
   /* background: #010007; */
 }
@@ -363,7 +363,7 @@ button {
   box-sizing: border-box;
   position: relative;
   width: 90%;
-  margin: calc(58 * var(--rpx)) 0 0 0;
+  margin: calc(35 * var(--rpx)) 0 0 0;
   padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
   cursor: pointer;
   background: #ffffff;
