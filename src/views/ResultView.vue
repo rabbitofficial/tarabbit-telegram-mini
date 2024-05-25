@@ -108,7 +108,7 @@ onMounted(() => {
   <div class="main-container light-gradient">
     <div class="iphone-x-light-default"></div>
 
-    <div class="nav">
+    <div class="nav" v-if="false">
       <div class="nav-2">
         <div class="internet">
           <div class="iconLeft globalHide">
@@ -262,7 +262,7 @@ onMounted(() => {
 
 .middleTextContent {
   line-height: 130%;
-  text-align: justify;
+  /* text-align: justify; */
 }
 
 .textContent {

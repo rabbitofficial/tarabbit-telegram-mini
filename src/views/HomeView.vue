@@ -90,7 +90,7 @@ const roll = () => {
   <Loading :display="showLoading"></Loading>
   <div class="main-container light-gradient">
     <div class="iphone-x-light-default"></div>
-    <div class="nav">
+    <div class="nav" v-if="false">
       <div class="nav-2">
         <div class="internet">
           <div class="iconLeft">
@@ -152,7 +152,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span class="number" @click="testNetwork()">{{ leftRollCount }}</span><span class="label-8">Roll Left</span>
+      <span class="number">{{ leftRollCount }}</span><span class="label-8">Roll Left</span>
     </div>
 
   </div>
@@ -251,12 +251,18 @@ const roll = () => {
 .hand {
   z-index: 60;
   position: absolute;
-  top: calc(287* var(--rpx));
-  right: calc(60* var(--rpx));
+  top: calc(23* var(--rpx));
+  /* right: calc(60* var(--rpx)); */
+  /* background-color: rgba(0, 0, 0, 0.25); */
+  width: calc(339* var(--rpx));
+  height: calc(339* var(--rpx));
 }
 
 .hand img {
   width: calc(105* var(--rpx));
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 .atBottom {
