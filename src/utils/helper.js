@@ -55,7 +55,8 @@ const getDefaultCards = () => {
 
 const helper = {
   test: () => {},
-  baseUrl: "https://taapi.cvgo.vip/",
+  //baseUrl: "https://taapi.cvgo.vip/",
+  baseUrl: "https://api.tarabbit.com/",
   getRamdomCard,
   getDefaultCards,
   getCard,
