@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import { useI18n } from 'vue-i18n'
 import Loading from '@/components/Loading.vue';
 const { t, locale } = useI18n({ useScope: 'global' })
@@ -13,12 +13,13 @@ const canRoll = ref(true)
 const leftRollCount = ref(12)
 const showLoading = ref(true)
 
+const userInfoVue = reactive({ data: {} })
 //locale.value = 'en'
 const changeLang = () => {
   locale.value = 'ja1'
 }
 
-const getTgInfo = async (user) => {
+const sendTgInfo = async (user) => {
   const result = await axios({
     headers: {
       'Content-Type': 'application/json'
@@ -33,12 +34,27 @@ const getTgInfo = async (user) => {
       "language_code": user.language_code
     })
   })
-
 }
 
+///
+const getTgInfo = async () => {
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'get',
+    url: helper.baseUrl + 'telegram/api/tg/login/fetch?tg_id=' + window.Telegram.WebApp.initDataUnsafe.user.id
+  })
+
+  return result.data
+}
+
+//
 onMounted(async () => {
   let startParam = window.Telegram.WebApp.initDataUnsafe.start_param
-  await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
+  await sendTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
+  userInfoVue.data = await getTgInfo()
+
   showLoading.value = false
   if (leftRollCount.value > 0) {
     canRoll.value = true
@@ -166,7 +182,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span class="number">{{ leftRollCount }}</span><span class="label-8">Roll Left</span>
+      <span class="number">{{ userInfoVue.data.points }}</span><span class="label-8">Roll Left</span>
     </div>
 
   </div>

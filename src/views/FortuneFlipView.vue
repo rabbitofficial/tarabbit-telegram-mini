@@ -4,13 +4,40 @@ import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
 import doubleHands from '../assets/images/doubleHands.svg';
 import cross from '../assets/images/cross.svg';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import helper from '@/utils/helper';
+import axios from 'axios';
+import Loading from '@/components/Loading.vue';
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
 const navicatePage = (page) => {
   router.push(`/${page}`)
 }
+
+const showLoading = ref(false)
+
+const updateTgInfo = async () => {
+  showLoading.value = true
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: helper.baseUrl + 'telegram/api/tg/login/update',
+    data: JSON.stringify({
+      "tg_id": window.Telegram.WebApp.initDataUnsafe.user.id,
+      "points": 400
+    })
+  })
+
+  showLoading.value = false
+}
+
+onMounted(async ()=>{
+  //await updateTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
+  //showLoading.value = false 
+})
 
 const showPopup = ref(false)
 const resetDefault = (dom) => {
@@ -32,8 +59,9 @@ const flipCard = () => {
   })
 }
 
-const checkBalance = () => {
+const checkBalance = async () => {
   //showPopup.value = true
+  await updateTgInfo()
   navicatePage('result')
 }
 const checkResult = () => {
@@ -42,6 +70,7 @@ const checkResult = () => {
 </script>
 
 <template>
+  <Loading :display="showLoading"></Loading>
   <div class="main-container">
     <div class="iphone-x-light-default"></div>
 
