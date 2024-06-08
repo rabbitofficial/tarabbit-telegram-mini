@@ -53,7 +53,7 @@ const loadTarotData = async () => {
     method: 'post',
     url: helper.baseUrl + 'fortune/check-my-fortune',
     data: JSON.stringify({
-      "userId": "123456",
+      "userId": window.Telegram.WebApp.initDataUnsafe.user.id,
       "tarotCards": _.pluck(resultListRender.data, 'query'),
       "query": "Can you please share some guidance to me in 6 months?"
     })

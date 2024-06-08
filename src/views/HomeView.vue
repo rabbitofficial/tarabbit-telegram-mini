@@ -18,14 +18,28 @@ const changeLang = () => {
   locale.value = 'ja1'
 }
 
-onMounted(() => {
+const getTgInfo = async (user) => {
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: helper.baseUrl + 'telegram/api/tg/login',
+    data: JSON.stringify({
+      "tg_id": user.id,
+      "first_name": user.first_name,
+      "last_name": user.last_name,
+      "username": user.username,
+      "language_code": user.language_code
+    })
+  })
+
+}
+
+onMounted(async () => {
   let startParam = window.Telegram.WebApp.initDataUnsafe.start_param
-
-  console.log(startParam)
-  //const res = window.Telegram.WebApp.initData
+  await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
   showLoading.value = false
-
-  //console.log("res21312312355", tg.initData)
   if (leftRollCount.value > 0) {
     canRoll.value = true
   }
