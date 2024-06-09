@@ -9,11 +9,17 @@ import axios from 'axios';
 const circleEle = ref(null);
 const plusPoint = ref(null);
 const eyeOn = ref(false)
-const canRoll = ref(true)
-const leftRollCount = ref(12)
+const canRoll = ref(false)
 const showLoading = ref(true)
 
 const userInfoVue = reactive({ data: {} })
+
+const showPopup = (info) => {
+  Telegram.WebApp.showPopup({
+    title: info.title,
+    message: info.message,
+  })
+}
 //locale.value = 'en'
 const changeLang = () => {
   locale.value = 'ja1'
@@ -36,7 +42,34 @@ const sendTgInfo = async (user) => {
   })
 }
 
-///
+
+const updateUserInfo = async (info) => {
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: helper.baseUrl + 'telegram/api/tg/login/update',
+    data: JSON.stringify({
+      tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+      ...info
+    })
+  })
+}
+
+const addReferalInfo = async (addInfo) => {
+  const result = await axios({
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    url: helper.baseUrl + 'referral/api/referral',
+    data: JSON.stringify({
+      ...addInfo
+    })
+  })
+}
+
 const getTgInfo = async () => {
   const result = await axios({
     headers: {
@@ -49,16 +82,20 @@ const getTgInfo = async () => {
   return result.data
 }
 
-//
 onMounted(async () => {
   let startParam = window.Telegram.WebApp.initDataUnsafe.start_param
   await sendTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
+  if (startParam && window.Telegram.WebApp.initDataUnsafe.user.id != startParam) {
+    await addReferalInfo({
+      referrer_id: startParam.toString(),
+      referred_id: window.Telegram.WebApp.initDataUnsafe.user.id.toString()
+    })
+    console.log("startParam", startParam)
+  }
   userInfoVue.data = await getTgInfo()
 
   showLoading.value = false
-  if (leftRollCount.value > 0) {
-    canRoll.value = true
-  }
+
 });
 
 const testNetwork = async () => {
@@ -91,9 +128,19 @@ const test = () => {
   })
 }
 
-const roll = () => {
-  canRoll.value = false
+const roll = async () => {
+
+  if (userInfoVue.data.left_roll_times <= 0) {
+    showPopup({
+      title: "Warning",
+      message: "Insufficient rolls, please invite friends to get more"
+    })
+
+    return
+  }
   leftRollCount.value--
+
+  userInfoVue.data.left_roll_times -= 1
   move(circleEle.value).duration(1200).rotate(360 * 10).ease('in')
     .end(() => {
       // plus 100
@@ -106,12 +153,19 @@ const roll = () => {
         })
       })
 
-      move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').end(() => {
+      move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').end(async () => {
         if (leftRollCount.value > 0) {
           canRoll.value = true
+          userInfoVue.data.points += 100
+
+          await updateUserInfo({
+            points: userInfoVue.data.points,
+            left_roll_times: userInfoVue.data.left_roll_times,
+          })
         }
       })
     });
+
 }
 
 </script>
@@ -134,7 +188,8 @@ const roll = () => {
     </div>
     <div class="level flexCenter" @click="test">
       <!-- <span class="zero">101</span><span class="level-0">Level 0 {{ t("message.hello") }}</span> -->
-      <span class="zero">0</span><span class="level-0">Level 0</span>
+      <span class="zero">{{ userInfoVue.data.points ?? 0 }}</span><span class="level-0">Level {{ userInfoVue.data.level
+        ?? 0 }}</span>
     </div>
 
     <div class="circleEye">
@@ -147,7 +202,7 @@ const roll = () => {
         <div class="frame"></div>
       </div>
 
-      <div class="hand" @click="canRoll && roll()">
+      <div class="hand" @click="roll()">
         <img src="../assets/images/hand.png" alt="">
       </div>
     </div>
@@ -182,7 +237,7 @@ const roll = () => {
         </router-link>
 
       </div>
-      <span class="number">{{ userInfoVue.data.points }}</span><span class="label-8">Roll Left</span>
+      <span class="number">{{ userInfoVue.data.left_roll_times }}</span><span class="label-8">Roll Left</span>
     </div>
 
   </div>

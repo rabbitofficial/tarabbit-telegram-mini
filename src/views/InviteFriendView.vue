@@ -3,10 +3,20 @@ import doubleHandFriend from '../assets/images/doubleHandFriend.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
 import { ref } from 'vue';
+import helper from '@/utils/helper';
+import axios from 'axios';
+import Loading from '@/components/Loading.vue';
 
+const showLoading = ref(false)
+const webAppLink = "http://t.me/test_tatata_bot/tarot?startapp=" + window.Telegram.WebApp.initDataUnsafe.user.id
+const receivedContent = "okok"
+const inviteFriend = ()=>{
+  window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${webAppLink}&text=${receivedContent}`);
+}
 </script>
 
 <template>
+  <Loading :display="showLoading"></Loading>
   <div class="main-container">
     <div class="iphone-x-light-default"></div>
 
@@ -39,7 +49,8 @@ import { ref } from 'vue';
         </div>
       </div>
     </div>
-    <div class="bottonText flexCenter">
+    <a style="font-size: 30px;margin: 20px;" href="tg://msg_url?url=http%3A%2F%2Ft.me%2Ftest_tatata_bot%2Ftarot%26text%3Dokok">abcacb</a>
+    <div class="bottonText flexCenter" @click="inviteFriend()">
       <div class="bottomButton">
         <span class="content">Invite Friends</span>
       </div>
