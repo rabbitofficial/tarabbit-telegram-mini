@@ -9,7 +9,7 @@ import axios from 'axios';
 const circleEle = ref(null);
 const plusPoint = ref(null);
 const eyeOn = ref(false)
-const canRoll = ref(false)
+const canRoll = ref(true)
 const showLoading = ref(true)
 
 const userInfoVue = reactive({ data: {} })
@@ -138,9 +138,9 @@ const roll = async () => {
 
     return
   }
-  leftRollCount.value--
 
   userInfoVue.data.left_roll_times -= 1
+  canRoll.value = false
   move(circleEle.value).duration(1200).rotate(360 * 10).ease('in')
     .end(() => {
       // plus 100
@@ -154,15 +154,12 @@ const roll = async () => {
       })
 
       move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').end(async () => {
-        if (leftRollCount.value > 0) {
-          canRoll.value = true
-          userInfoVue.data.points += 100
-
-          await updateUserInfo({
-            points: userInfoVue.data.points,
-            left_roll_times: userInfoVue.data.left_roll_times,
-          })
-        }
+        userInfoVue.data.points += 100
+        canRoll.value = true
+        await updateUserInfo({
+          points: userInfoVue.data.points,
+          left_roll_times: userInfoVue.data.left_roll_times,
+        })
       })
     });
 
@@ -202,7 +199,7 @@ const roll = async () => {
         <div class="frame"></div>
       </div>
 
-      <div class="hand" @click="roll()">
+      <div class="hand" @click="canRoll && roll()">
         <img src="../assets/images/hand.png" alt="">
       </div>
     </div>

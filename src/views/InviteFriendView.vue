@@ -49,7 +49,6 @@ const inviteFriend = ()=>{
         </div>
       </div>
     </div>
-    <a style="font-size: 30px;margin: 20px;" href="tg://msg_url?url=http%3A%2F%2Ft.me%2Ftest_tatata_bot%2Ftarot%26text%3Dokok">abcacb</a>
     <div class="bottonText flexCenter" @click="inviteFriend()">
       <div class="bottomButton">
         <span class="content">Invite Friends</span>
