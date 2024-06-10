@@ -8,9 +8,9 @@ import axios from 'axios';
 import Loading from '@/components/Loading.vue';
 
 const showLoading = ref(false)
-const webAppLink = "http://t.me/test_tatata_bot/tarot?startapp=" + window.Telegram.WebApp.initDataUnsafe.user.id
-const receivedContent = "okok"
-const inviteFriend = ()=>{
+const webAppLink = `${helper.inviteLink}?startapp=` + window.Telegram.WebApp.initDataUnsafe.user.id
+const receivedContent = "Invite Friends to get more points"
+const inviteFriend = () => {
   window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${webAppLink}&text=${receivedContent}`);
 }
 </script>

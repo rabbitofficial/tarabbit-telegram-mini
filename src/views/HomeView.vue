@@ -1,170 +1,220 @@
 <script setup>
-import { onMounted, ref, reactive } from 'vue';
-import { useI18n } from 'vue-i18n'
-import Loading from '@/components/Loading.vue';
-const { t, locale } = useI18n({ useScope: 'global' })
-import helper from '@/utils/helper';
-import axios from 'axios';
+import { onMounted, ref, reactive } from "vue";
+import { useI18n } from "vue-i18n";
+import Loading from "@/components/Loading.vue";
+const { t, locale } = useI18n({ useScope: "global" });
+import helper from "@/utils/helper";
+import axios from "axios";
 //https://vue-i18n.intlify.dev/guide/advanced/composition.html
 const circleEle = ref(null);
 const plusPoint = ref(null);
-const eyeOn = ref(false)
-const canRoll = ref(true)
-const showLoading = ref(true)
+const eyeOn = ref(false);
+const canRoll = ref(true);
+const showLoading = ref(true);
 
-const userInfoVue = reactive({ data: {} })
+const userInfoVue = reactive({ data: {} });
 
 const showPopup = (info) => {
   Telegram.WebApp.showPopup({
     title: info.title,
     message: info.message,
-  })
-}
+  });
+};
 //locale.value = 'en'
 const changeLang = () => {
-  locale.value = 'ja1'
-}
+  locale.value = "ja1";
+};
 
 const sendTgInfo = async (user) => {
   const result = await axios({
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    method: 'post',
-    url: helper.baseUrl + 'telegram/api/tg/login',
+    method: "post",
+    url: helper.baseUrl + "telegram/api/tg/login",
     data: JSON.stringify({
-      "tg_id": user.id,
-      "first_name": user.first_name,
-      "last_name": user.last_name,
-      "username": user.username,
-      "language_code": user.language_code
-    })
-  })
-}
-
+      tg_id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.username,
+      language_code: user.language_code,
+    }),
+  });
+};
 
 const updateUserInfo = async (info) => {
   const result = await axios({
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    method: 'post',
-    url: helper.baseUrl + 'telegram/api/tg/login/update',
+    method: "post",
+    url: helper.baseUrl + "telegram/api/tg/login/update",
     data: JSON.stringify({
-      tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
       ...info
-    })
-  })
-}
+    }),
+  });
+};
 
 const addReferalInfo = async (addInfo) => {
   const result = await axios({
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    method: 'post',
-    url: helper.baseUrl + 'referral/api/referral',
+    method: "post",
+    url: helper.baseUrl + "referral/api/referral",
     data: JSON.stringify({
-      ...addInfo
-    })
-  })
-}
+      ...addInfo,
+    }),
+  });
+};
 
-const getTgInfo = async () => {
+const getTgInfo = async (id) => {
   const result = await axios({
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    method: 'get',
-    url: helper.baseUrl + 'telegram/api/tg/login/fetch?tg_id=' + window.Telegram.WebApp.initDataUnsafe.user.id
-  })
+    method: "get",
+    url:
+      helper.baseUrl +
+      "telegram/api/tg/login/fetch?tg_id=" +
+      id
+  });
 
-  return result.data
-}
+  return result.data;
+};
+
+const getReferInfo = async (id) => {
+  const result = await axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "get",
+    url:
+      helper.baseUrl + "referral/api/referral/getInviteInfo?referrer_id=" + id,
+  });
+
+  return result.data;
+};
 
 onMounted(async () => {
-  let startParam = window.Telegram.WebApp.initDataUnsafe.start_param
-  await sendTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
-  if (startParam && window.Telegram.WebApp.initDataUnsafe.user.id != startParam) {
+  let startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+  userInfoVue.data = await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user.id);
+  await sendTgInfo(window.Telegram.WebApp.initDataUnsafe.user);
+  if (
+    startParam &&
+    window.Telegram.WebApp.initDataUnsafe.user.id != startParam
+  ) {
+    const referInfo = await getReferInfo(startParam);
+    const already_invited = referInfo.some(
+      (item) => item.referred_id == Telegram.WebApp.initDataUnsafe.user.id
+    );
+    if (!already_invited) {
+      const referrerInfo = await getTgInfo(startParam)
+      await updateUserInfo({
+        tg_id: startParam,
+        points: referrerInfo.points + 150,
+        left_roll_times: userInfoVue.data.left_roll_times,
+      });
+    }
     await addReferalInfo({
       referrer_id: startParam.toString(),
-      referred_id: window.Telegram.WebApp.initDataUnsafe.user.id.toString()
-    })
-    console.log("startParam", startParam)
+      referred_id: window.Telegram.WebApp.initDataUnsafe.user.id.toString(),
+    });
   }
-  userInfoVue.data = await getTgInfo()
 
-  showLoading.value = false
-
+  showLoading.value = false;
 });
 
 const testNetwork = async () => {
-  console.log(123123)
-  //const result = await axios.post(helper.baseUrl + 'fortune/check-my-fortune', 
+  console.log(123123);
+  //const result = await axios.post(helper.baseUrl + 'fortune/check-my-fortune',
   const result = await axios({
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    method: 'post',
-    url: helper.baseUrl + 'fortune/check-my-fortune',
+    method: "post",
+    url: helper.baseUrl + "fortune/check-my-fortune",
     data: JSON.stringify({
-      "userId": "123456",
-      "tarotCards": ["The Fool", "The Magician", "The High Priestess"],
-      "query": "Can you please share some guidance to me in 6 months?"
-    })
-  })
+      userId: "123456",
+      tarotCards: ["The Fool", "The Magician", "The High Priestess"],
+      query: "Can you please share some guidance to me in 6 months?",
+    }),
+  });
 
-  console.log("result", result)
-}
+  console.log("result", result);
+};
 // plus 100 test
 const test = () => {
-  move(plusPoint.value).duration(800).y(-100).set('opacity', '1').ease('in').end(() => {
-    move(plusPoint.value).duration(400).y(-150).set('opacity', '0').ease('out').end(() => {
-      setTimeout(() => {
-        plusPoint.value.removeAttribute('style')
-      }, 300)
-
-    })
-  })
-}
+  move(plusPoint.value)
+    .duration(800)
+    .y(-100)
+    .set("opacity", "1")
+    .ease("in")
+    .end(() => {
+      move(plusPoint.value)
+        .duration(400)
+        .y(-150)
+        .set("opacity", "0")
+        .ease("out")
+        .end(() => {
+          setTimeout(() => {
+            plusPoint.value.removeAttribute("style");
+          }, 300);
+        });
+    });
+};
 
 const roll = async () => {
-
   if (userInfoVue.data.left_roll_times <= 0) {
     showPopup({
       title: "Warning",
-      message: "Insufficient rolls, please invite friends to get more"
-    })
-
-    return
-  }
-
-  userInfoVue.data.left_roll_times -= 1
-  canRoll.value = false
-  move(circleEle.value).duration(1200).rotate(360 * 10).ease('in')
-    .end(() => {
-      // plus 100
-      move(plusPoint.value).duration(800).y(-100).set('opacity', '1').ease('in').end(() => {
-        move(plusPoint.value).duration(400).y(-150).set('opacity', '0').ease('out').end(() => {
-          setTimeout(() => {
-            plusPoint.value.removeAttribute('style')
-          }, 300)
-
-        })
-      })
-
-      move(circleEle.value).duration(1000).rotate(360 * 20).ease('out').end(async () => {
-        userInfoVue.data.points += 100
-        canRoll.value = true
-        await updateUserInfo({
-          points: userInfoVue.data.points,
-          left_roll_times: userInfoVue.data.left_roll_times,
-        })
-      })
+      message: "Insufficient rolls, please invite friends to get more",
     });
 
-}
+    return;
+  }
 
+  userInfoVue.data.left_roll_times -= 1;
+  canRoll.value = false;
+  move(circleEle.value)
+    .duration(1200)
+    .rotate(360 * 10)
+    .ease("in")
+    .end(() => {
+      // plus 100
+      move(plusPoint.value)
+        .duration(800)
+        .y(-100)
+        .set("opacity", "1")
+        .ease("in")
+        .end(() => {
+          move(plusPoint.value)
+            .duration(400)
+            .y(-150)
+            .set("opacity", "0")
+            .ease("out")
+            .end(() => {
+              setTimeout(() => {
+                plusPoint.value.removeAttribute("style");
+              }, 300);
+            });
+        });
+
+      move(circleEle.value)
+        .duration(1000)
+        .rotate(360 * 20)
+        .ease("out")
+        .end(async () => {
+          userInfoVue.data.points += 100;
+          canRoll.value = true;
+          await updateUserInfo({
+            tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+            points: userInfoVue.data.points,
+            left_roll_times: userInfoVue.data.left_roll_times,
+          });
+        });
+    });
+};
 </script>
 
 <template>
@@ -175,10 +225,10 @@ const roll = async () => {
       <div class="nav-2">
         <div class="internet">
           <div class="iconLeft">
-            <img src="../assets/images/lang.svg" alt="" style="visibility: hidden;">
+            <img src="../assets/images/lang.svg" alt="" style="visibility: hidden" />
           </div>
           <div class="iconRight" @click="changeLang()">
-            <img src="../assets/images/lang.svg" alt="">
+            <img src="../assets/images/lang.svg" alt="" />
           </div>
         </div>
       </div>
@@ -193,14 +243,14 @@ const roll = async () => {
       <div class="plusPoint" ref="plusPoint">+100</div>
       <div class="combine" ref="circleEle">
         <div class="openEye">
-          <img class="open" src="../assets/images/eyeOpen.png" alt="" v-if="eyeOn">
-          <img class="close" src="../assets/images/eyeClose.png" alt="" v-if="!eyeOn">
+          <img class="open" src="../assets/images/eyeOpen.png" alt="" v-if="eyeOn" />
+          <img class="close" src="../assets/images/eyeClose.png" alt="" v-if="!eyeOn" />
         </div>
         <div class="frame"></div>
       </div>
 
       <div class="hand" @click="canRoll && roll()">
-        <img src="../assets/images/hand.png" alt="">
+        <img src="../assets/images/hand.png" alt="" />
       </div>
     </div>
     <router-link to="/fortune">
@@ -232,11 +282,9 @@ const roll = async () => {
             <span class="label-7">Invite <br />Friends</span>
           </div>
         </router-link>
-
       </div>
       <span class="number">{{ userInfoVue.data.left_roll_times }}</span><span class="label-8">Roll Left</span>
     </div>
-
   </div>
 </template>
 
@@ -250,7 +298,7 @@ const roll = async () => {
   top: calc(224 * var(--rpx));
   opacity: 0;
   right: calc(75 * var(--rpx));
-  font-size: calc(22 * var(--rpx))
+  font-size: calc(22 * var(--rpx));
 }
 
 .combine {
@@ -304,12 +352,12 @@ const roll = async () => {
 }
 
 .openEye .open {
-  width: calc(58* var(--rpx));
+  width: calc(58 * var(--rpx));
 }
 
 .openEye .close {
-  margin-top: calc(25* var(--rpx));
-  width: calc(58* var(--rpx));
+  margin-top: calc(25 * var(--rpx));
+  width: calc(58 * var(--rpx));
 }
 
 .middleText {
@@ -333,15 +381,15 @@ const roll = async () => {
 .hand {
   z-index: 60;
   position: absolute;
-  top: calc(23* var(--rpx));
+  top: calc(23 * var(--rpx));
   /* right: calc(60* var(--rpx)); */
   /* background-color: rgba(0, 0, 0, 0.25); */
-  width: calc(339* var(--rpx));
-  height: calc(339* var(--rpx));
+  width: calc(339 * var(--rpx));
+  height: calc(339 * var(--rpx));
 }
 
 .hand img {
-  width: calc(105* var(--rpx));
+  width: calc(105 * var(--rpx));
   position: absolute;
   bottom: 0;
   right: 0;
@@ -349,10 +397,10 @@ const roll = async () => {
 
 .atBottom {
   display: flex;
-  height: calc(220* var(--rpx));
+  height: calc(220 * var(--rpx));
   width: 100%;
   position: relative;
-  top: calc(8* var(--rpx));
+  top: calc(8 * var(--rpx));
   box-sizing: border-box;
 }
 
@@ -571,7 +619,6 @@ button {
   z-index: 20;
 }
 
-
 .suit-club-fill {
   display: flex;
   align-items: center;
@@ -622,7 +669,6 @@ button {
   z-index: 24;
   overflow: hidden;
 }
-
 
 /* 3 left */
 

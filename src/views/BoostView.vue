@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">1011</span><span class="level-0">Level 1</span>
+      <span class="zero">100</span><span class="level-0">Level 1</span>
     </div>
 
     <div class="boostContentWrap flexCenter">
