@@ -1,61 +1,94 @@
 <script setup>
+import { onMounted, ref, reactive } from "vue";
+import Loading from "@/components/Loading.vue";
+import helper from "@/utils/helper";
+import axios from "axios";
+const showLoading = ref(true);
 
+const getTgInfo = async (id) => {
+  const result = await axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "get",
+    url: helper.baseUrl + "telegram/api/tg/login/fetch?tg_id=" + id,
+  });
+  ``
+  return result.data;
+};
+
+const webAppLink = `${helper.inviteLink}?startapp=` + window.Telegram.WebApp.initDataUnsafe.user.id
+const receivedContent = "Invite Friends to get more points"
+const inviteFriend = () => {
+  window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${webAppLink}&text=${receivedContent}`);
+}
+
+const userInfoVue = reactive({ data: {} });
+
+onMounted(async () => {
+  userInfoVue.data = await getTgInfo(
+    window.Telegram.WebApp.initDataUnsafe.user.id
+  );
+  showLoading.value = false;
+});
 </script>
 
 <template>
+  <Loading :display="showLoading"></Loading>
   <div class="main-container">
     <div class="iphone-x-light-default"></div>
     <div class="nav" v-if="false">
       <div class="nav-2">
         <div class="internet">
           <div class="iconLeft">
-            <img src="../assets/images/arrowLeft.svg" alt="" style="visibility: hidden;">
+            <img src="../assets/images/arrowLeft.svg" alt="" style="visibility: hidden" />
           </div>
           <div class="iconRight">
-            <img src="../assets/images/lang.svg" alt="" style="visibility: hidden;">
+            <img src="../assets/images/lang.svg" alt="" style="visibility: hidden" />
           </div>
         </div>
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">100</span><span class="level-0">Level 1</span>
+      <span class="zero">{{ userInfoVue.data.points }}</span><span class="level-0">Level {{ userInfoVue.data.level
+        }}</span>
     </div>
 
     <div class="boostContentWrap flexCenter">
       <div class="boostContent">
         <div class="bundleLeft">
           <div class="boostLeft">
-            <img src="../assets/images/avataaars.svg" alt="">
+            <img src="../assets/images/avataaars.svg" alt="" />
           </div>
           <div class="boostMiddle">
-            <div class="boostTitle">Join our community </div>
+            <div class="boostTitle">Join our community</div>
             <div class="boostNumber">+1500</div>
           </div>
         </div>
 
         <div class="boostRight">
-          <img src="../assets/images/arrowRight.svg" alt="">
+          <img src="../assets/images/arrowRight.svg" alt="" />
         </div>
       </div>
 
       <div class="boostContent">
         <div class="bundleLeft">
           <div class="boostLeft">
-            <img src="../assets/images/x.svg" alt="">
+            <img src="../assets/images/x.svg" alt="" />
           </div>
           <div class="boostMiddle">
-            <div class="boostTitle">Join our X </div>
+            <div class="boostTitle">Join our X</div>
             <div class="boostNumber">+1500</div>
           </div>
         </div>
 
         <div class="boostRight">
-          <img src="../assets/images/arrowRight.svg" alt="">
+          <img src="../assets/images/arrowRight.svg" alt="" />
         </div>
       </div>
     </div>
 
-    <div class="bottonText flexCenter">
+    <div class="bottonText flexCenter" @click="inviteFriend()">
       <div class="bottomButton">
         <span class="content">Invite Friends</span>
       </div>
@@ -89,11 +122,11 @@
   height: calc(120 * var(--rpx));
   top: 0;
   background: rgba(255, 255, 255, 0.2);
-  border: calc(1 * var(--rpx)) solid #FFFFFF;
+  border: calc(1 * var(--rpx)) solid #ffffff;
   box-shadow: 0 calc(6 * var(--rpx)) calc(10 * var(--rpx)) rgba(120, 120, 120, 0.1);
   border-radius: calc(16 * var(--rpx));
   margin-top: calc(16 * var(--rpx));
-  font-size: calc(24 * var(--rpx))
+  font-size: calc(24 * var(--rpx));
 }
 
 .boostMiddle {
@@ -106,7 +139,7 @@
 }
 
 .boostTitle {
-  font-size: calc(20 * var(--rpx))
+  font-size: calc(20 * var(--rpx));
 }
 
 .plusPoint {
@@ -115,7 +148,7 @@
   top: calc(224 * var(--rpx));
   opacity: 0;
   right: calc(75 * var(--rpx));
-  font-size: calc(22 * var(--rpx))
+  font-size: calc(22 * var(--rpx));
 }
 
 .combine {
@@ -158,7 +191,6 @@
   justify-content: center;
 }
 
-
 .level {
   flex-direction: column;
   margin-bottom: calc(60 * var(--rpx));
@@ -190,8 +222,10 @@
   z-index: 31;
   box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
   color: white;
-  background: linear-gradient(90deg, rgba(220, 130, 151, 0.8) 0%, rgba(98, 27, 170, 0.8) 100%);
-  border: calc(1 * var(--rpx)) solid #FFFFFF;
+  background: linear-gradient(90deg,
+      rgba(220, 130, 151, 0.8) 0%,
+      rgba(98, 27, 170, 0.8) 100%);
+  border: calc(1 * var(--rpx)) solid #ffffff;
   border-radius: calc(100 * var(--rpx));
   font-size: calc(24 * var(--rpx));
 }
