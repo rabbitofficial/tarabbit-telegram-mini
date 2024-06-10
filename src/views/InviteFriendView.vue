@@ -2,11 +2,30 @@
 import doubleHandFriend from '../assets/images/doubleHandFriend.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import helper from '@/utils/helper';
 import axios from 'axios';
 import Loading from '@/components/Loading.vue';
 
+const getReferInfo = async (id) => {
+  const result = await axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "get",
+    url:
+      helper.baseUrl + "referral/api/referral/getInviteInfo?referrer_id=" + id,
+  });
+
+  return result.data;
+};
+
+const referNumber = ref(0)
+
+onMounted(async () => {
+  const result = await getReferInfo(window.Telegram.WebApp.initDataUnsafe.user.id)
+  referNumber.value = result.length ?? 0
+})
 const showLoading = ref(false)
 const webAppLink = `${helper.inviteLink}?startapp=` + window.Telegram.WebApp.initDataUnsafe.user.id
 const receivedContent = "Invite Friends to get more points"
@@ -34,7 +53,7 @@ const inviteFriend = () => {
       </div>
     </div>
     <div class="middleContent flexCenter">
-      <div class="friendNum">1 Friend</div>
+      <div class="friendNum">{{ referNumber }} Friend(s)</div>
       <div class="friendImg">
         <img :src="doubleHandFriend" alt="">
       </div>
