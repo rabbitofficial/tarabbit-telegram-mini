@@ -98,8 +98,8 @@ const getReferInfo = async (id) => {
 
 onMounted(async () => {
   let startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
-  userInfoVue.data = await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user.id);
   await sendTgInfo(window.Telegram.WebApp.initDataUnsafe.user);
+  userInfoVue.data = await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user.id);
   if (
     startParam &&
     window.Telegram.WebApp.initDataUnsafe.user.id != startParam
