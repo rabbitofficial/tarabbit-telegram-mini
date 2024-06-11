@@ -98,7 +98,10 @@ const getReferInfo = async (id) => {
 
 onMounted(async () => {
   let startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+  //register user first
   await sendTgInfo(window.Telegram.WebApp.initDataUnsafe.user);
+
+  //get user info
   userInfoVue.data = await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user.id);
   if (
     startParam &&
@@ -112,8 +115,7 @@ onMounted(async () => {
       const referrerInfo = await getTgInfo(startParam)
       await updateUserInfo({
         tg_id: startParam,
-        points: referrerInfo.points + 150,
-        left_roll_times: userInfoVue.data.left_roll_times,
+        points: referrerInfo.points + 150
       });
     }
     await addReferalInfo({
