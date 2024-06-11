@@ -5,6 +5,19 @@ import helper from "@/utils/helper";
 import axios from "axios";
 const showLoading = ref(true);
 
+const updateUserInfo = async (info) => {
+  const result = await axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "post",
+    url: helper.baseUrl + "telegram/api/tg/login/update",
+    data: JSON.stringify({
+      ...info
+    }),
+  });
+};
+
 const getTgInfo = async (id) => {
   const result = await axios({
     headers: {
@@ -13,7 +26,6 @@ const getTgInfo = async (id) => {
     method: "get",
     url: helper.baseUrl + "telegram/api/tg/login/fetch?tg_id=" + id,
   });
-  ``
   return result.data;
 };
 
@@ -25,12 +37,63 @@ const inviteFriend = () => {
 
 const userInfoVue = reactive({ data: {} });
 
-onMounted(async () => {
+const initData = async () => {
+  showLoading.value = true;
   userInfoVue.data = await getTgInfo(
     window.Telegram.WebApp.initDataUnsafe.user.id
   );
   showLoading.value = false;
+}
+onMounted(async () => {
+  initData()
 });
+
+const showPopup = (info) => {
+  Telegram.WebApp.showPopup({
+    title: info.title,
+    message: info.message,
+  });
+};
+
+const joinCommunity = async () => {
+  if (!userInfoVue.data.joined_X) {
+    window.Telegram.WebApp.openTelegramLink('https://t.me/tarabbit')
+    await updateUserInfo({
+      tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+      points: userInfoVue.data.points + 1500,
+      joined_X: true
+    });
+
+    setTimeout(() => {
+      initData()
+    }, 2000)
+  } else {
+    showPopup({
+      title: "Warning",
+      message: "Already joined community",
+    });
+  }
+}
+
+const joinX = async () => {
+  if (!userInfoVue.data.joined_community) {
+    window.Telegram.WebApp.openLink('https://x.com/tarabbitluck')
+    await updateUserInfo({
+      tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
+      points: userInfoVue.data.points + 1500,
+      joined_community: true
+    });
+
+    setTimeout(() => {
+      initData()
+    }, 2000)
+  } else {
+    showPopup({
+      title: "Warning",
+      message: "Already joined X",
+    });
+  }
+}
 </script>
 
 <template>
@@ -50,12 +113,12 @@ onMounted(async () => {
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">{{ userInfoVue.data.points }}</span><span class="level-0">Level {{ userInfoVue.data.level
+      <span class="zero">{{ userInfoVue.data.points }}</span><span class="level-0">Level {{ userInfoVue.data.level ?? 0
         }}</span>
     </div>
 
     <div class="boostContentWrap flexCenter">
-      <div class="boostContent">
+      <div class="boostContent" @click="joinCommunity()">
         <div class="bundleLeft">
           <div class="boostLeft">
             <img src="../assets/images/avataaars.svg" alt="" />
@@ -71,7 +134,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="boostContent">
+      <div class="boostContent" @click="joinX()">
         <div class="bundleLeft">
           <div class="boostLeft">
             <img src="../assets/images/x.svg" alt="" />
