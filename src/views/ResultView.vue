@@ -42,7 +42,7 @@ const queryContent = reactive({
   "query": "Can you please share some guidance to me in 6 months?"
 }) */
 const resultTime = ref(new Date().toTimeString())
-const tarotResult = ref(`Certainly! In the next 6 months, it looks like you may encounter some delays or setbacks with the Page of Wands and Seven of Pentacles both being reserved. This could indicate a period of feeling stuck or lacking motivation in pursuing your goals. However, with the World card upright, there is a sense of completion and fulfillment on the horizon. This may suggest that despite the challenges you face in the coming months, you will eventually reach a point of success and achievement. Keep pushing forward and stay focused on your long-term goals. Trust that you have the skills and capabilities to overcome any obstacles that come your way. Remember to stay patient and consistent in your efforts, as your hard work will pay off in the end. Trust in the process and believe in yourself.`)
+const tarotResult = ref(``)
 
 const loadTarotData = async () => {
   showLoading.value = true
@@ -62,6 +62,13 @@ const loadTarotData = async () => {
   tarotResult.value = result.data.fortune
   resultTime.value = new Date().toTimeString()
 }
+
+const showPopup = (info) => {
+  Telegram.WebApp.showPopup({
+    title: info.title,
+    message: info.message,
+  });
+};
 
 const randomTarot = () => {
   //const resultList = []
@@ -87,8 +94,17 @@ const randomTarot = () => {
   loadTarotData()
 }
 
+window.Telegram.WebApp.BackButton.isVisible = false;
 onMounted(() => {
-  randomTarot()
+  if (window.localStorage.getItem("canTarabbit") != 0) {
+    randomTarot()
+    window.localStorage.setItem("canTarabbit", "0");
+  } else {
+    showPopup({
+      title: "Warning",
+      message: "Do not refresh, you can go to homepage and try again",
+    });
+  }
 })
 /* const flipCard = () => {
   move(flip2.value).rotateY(180).then(() => {

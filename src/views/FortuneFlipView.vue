@@ -15,6 +15,10 @@ const navicatePage = (page) => {
   router.push(`/${page}`)
 }
 
+const navicateReplacePage = (page) => {
+  router.replace(`/${page}`)
+}
+
 const showLoading = ref(false)
 
 const getTgInfo = async (id) => {
@@ -37,6 +41,13 @@ const initData = async () => {
   );
   showLoading.value = false;
 }
+
+const showMyPopup = (info) => {
+  Telegram.WebApp.showPopup({
+    title: info.title,
+    message: info.message,
+  });
+};
 
 const updateTgInfo = async () => {
   showLoading.value = true
@@ -79,11 +90,21 @@ const flipCard = () => {
   })
 }
 
+
 const checkBalance = async () => {
   //showPopup.value = true
-  await updateTgInfo()
-  await initData()
-  navicatePage('result')
+  if (userInfoVue.data.points >= 50) {
+    await updateTgInfo()
+    await initData()
+    window.localStorage.setItem("canTarabbit", "1");
+    navicateReplacePage('result')
+  } else {
+    showMyPopup({
+      title: "Warning",
+      message: "Not enought points",
+    });
+  }
+
 }
 const checkResult = () => {
 
