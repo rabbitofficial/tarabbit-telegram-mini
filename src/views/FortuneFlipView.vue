@@ -4,7 +4,7 @@ import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
 import doubleHands from '../assets/images/doubleHands.svg';
 import cross from '../assets/images/cross.svg';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import helper from '@/utils/helper';
 import axios from 'axios';
 import Loading from '@/components/Loading.vue';
@@ -17,6 +17,27 @@ const navicatePage = (page) => {
 
 const showLoading = ref(false)
 
+const getTgInfo = async (id) => {
+  const result = await axios({
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "get",
+    url: helper.baseUrl + "telegram/api/tg/login/fetch?tg_id=" + id,
+  });
+  return result.data;
+};
+
+const userInfoVue = reactive({ data: {} });
+
+const initData = async () => {
+  showLoading.value = true;
+  userInfoVue.data = await getTgInfo(
+    window.Telegram.WebApp.initDataUnsafe.user.id
+  );
+  showLoading.value = false;
+}
+
 const updateTgInfo = async () => {
   showLoading.value = true
   const result = await axios({
@@ -27,16 +48,15 @@ const updateTgInfo = async () => {
     url: helper.baseUrl + 'telegram/api/tg/login/update',
     data: JSON.stringify({
       "tg_id": window.Telegram.WebApp.initDataUnsafe.user.id,
-      "points": 400
+      "points": userInfoVue.data.points - 50
     })
   })
 
   showLoading.value = false
 }
 
-onMounted(async ()=>{
-  //await updateTgInfo(window.Telegram.WebApp.initDataUnsafe.user)
-  //showLoading.value = false 
+onMounted(async () => {
+  initData()
 })
 
 const showPopup = ref(false)
@@ -62,6 +82,7 @@ const flipCard = () => {
 const checkBalance = async () => {
   //showPopup.value = true
   await updateTgInfo()
+  await initData()
   navicatePage('result')
 }
 const checkResult = () => {
