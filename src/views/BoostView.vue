@@ -113,7 +113,8 @@ const joinX = async () => {
       </div>
     </div>
     <div class="level flexCenter" @click="test">
-      <span class="zero">{{ userInfoVue.data.points }}</span><span class="level-0">Level {{ userInfoVue.data.level ?? 0
+      <span class="zero">{{ userInfoVue.data.points ?? 0 }}</span><span class="level-0">Level {{ userInfoVue.data.level
+        ?? 0
         }}</span>
     </div>
 
