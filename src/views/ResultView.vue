@@ -117,6 +117,10 @@ onMounted(() => {
     //resetDefault(flip2.value)
   })
 } */
+
+const goGetgem = () => {
+  window.Telegram.WebApp.openLink('https://getgems.io/collection/EQDtrxXwzEjCJEHtOvS8lKJBGijjQ0Z8KcteRl89lMywrBTk')
+}
 </script>
 
 <template>
@@ -220,11 +224,60 @@ onMounted(() => {
 
       </div>
     </div>
+
+    <div class="bottonText_button flexCenter" @click="goGetgem()">
+      <div class="bottomButton">
+        <span class="content">Collect Genesis Lucky Card</span>
+      </div>
+    </div>
     <!-- <div class="light-gradient"></div> -->
   </div>
 </template>
 
 <style scoped>
+.bottonText_button {
+  position: relative;
+  width: 100%;
+}
+
+.bottomButton .content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  flex-basis: auto;
+  position: relative;
+  width: calc(282* var(--rpx));
+  height: calc(29* var(--rpx));
+  font-family: Lato, var(--default-font-family);
+  font-size: calc(24 * var(--rpx));
+  font-weight: 500;
+  line-height: calc(29 * var(--rpx));
+  text-align: center;
+  white-space: nowrap;
+  z-index: 33;
+}
+
+.bottomButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: calc(12* var(--rpx));
+  box-sizing: border-box;
+  position: relative;
+  width: 90%;
+  margin: calc(10* var(--rpx)) 0 0 0;
+  padding: calc(15* var(--rpx)) calc(10* var(--rpx)) calc(15* var(--rpx)) calc(10* var(--rpx));
+  cursor: pointer;
+  z-index: 31;
+  box-shadow: calc(-8* var(--rpx)) calc(6* var(--rpx)) calc(5.800000190734863* var(--rpx)) 0 rgba(119, 119, 119, 0.1);
+  color: white;
+  background: rgba(255, 255, 255, 0.3);
+  border: calc(1* var(--rpx)) solid #FFFFFF;
+  border-radius: calc(100* var(--rpx));
+}
+
 .cardContent1 {
   position: absolute;
   top: calc(51* var(--rpx));
