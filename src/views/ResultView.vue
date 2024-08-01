@@ -742,7 +742,7 @@ button {
   font-weight: 500;
   line-height: calc(29 * var(--rpx));
   text-align: center;
-  //white-space: nowrap;
+  /* white-space: nowrap; */
   z-index: 33;
 }
 

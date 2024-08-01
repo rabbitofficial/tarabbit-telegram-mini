@@ -55,9 +55,9 @@ const getDefaultCards = () => {
 
 const helper = {
   test: () => {},
-  //baseUrl: "https://taapi.cvgo.vip/",
+  baseUrl: "https://taapi.cvgo.vip/",
   inviteLink: "http://t.me/Tarabbit_bot/myapp",
-  baseUrl: "https://c7ef-210-22-173-90.ngrok-free.app/",
+  // baseUrl: "https://c7ef-210-22-173-90.ngrok-free.app/",
   getRamdomCard,
   getDefaultCards,
   getCard,
