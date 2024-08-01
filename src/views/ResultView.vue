@@ -2,21 +2,21 @@
 import emptyCard from '../assets/images/emptyCard.svg';
 import tarotData from '../assets/json/tarot.json';
 import { reactive, ref, toRaw, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router';
 import helper from '@/utils/helper';
 import Loading from '@/components/Loading.vue';
 import axios from 'axios';
 import _ from 'underscore';
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 const navicatePage = (page) => {
-  router.push(`/${page}`)
-}
-const resultListRender = reactive({ data: [] })
+	router.push(`/${page}`);
+};
+const resultListRender = reactive({ data: [] });
 
-const tarot_quest_content = ref(window.localStorage.getItem("tarot_question_content"))
+const tarot_quest_content = ref(window.localStorage.getItem('tarot_question_content'));
 if (!tarot_quest_content.value) {
-  tarot_quest_content.value = "What’s My Fortune Today?"
+	tarot_quest_content.value = 'What’s My Fortune Today?';
 }
 
 /* poker logic */
@@ -34,7 +34,7 @@ cardResultList = _.filter(cardResultList, item => {
 })
 cardResultList = _.map(cardResultList, (obj) => _.values(obj)[0]);
 cardList.list = cardResultList */
-const showLoading = ref(false)
+const showLoading = ref(false);
 /* const resetDefault = (dom) => {
   dom.style['transition-timing-function'] = ''
   dom.style['transform'] = ''
@@ -54,73 +54,72 @@ const options = {
 const date = new Date();
 
 const resultTime = ref(date.toLocaleString('en-US', options));
-const tarotResult = ref(window.localStorage.getItem("tarotResultContent") )
+const tarotResult = ref(window.localStorage.getItem('tarotResultContent'));
 
 const loadTarotData = async () => {
-  showLoading.value = true
-  const result = await axios({
-    headers: {
-      "ngrok-skip-browser-warning": true,
-      'Content-Type': 'application/json'
-    },
-    method: 'post',
-    url: helper.baseUrl + 'fortune/check-my-fortune',
-    data: JSON.stringify({
-      "userId": window.Telegram.WebApp.initDataUnsafe.user.id,
-      "tarotCards": _.pluck(resultListRender.data, 'query'),
-      "query": tarot_quest_content.value+",Can you please share some guidance to me?"
-    })
-  })
-  showLoading.value = false
-  tarotResult.value = result.data.fortune.replace("\n","\n\n")
-  window.localStorage.setItem("tarotResultContent", tarotResult.value);
-  resultTime.value = new Date().toTimeString()
+	showLoading.value = true;
+	const result = await axios({
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		method: 'post',
+		url: helper.baseUrl + 'fortune/check-my-fortune',
+		data: JSON.stringify({
+			userId: window.Telegram.WebApp.initDataUnsafe.user.id,
+			tarotCards: _.pluck(resultListRender.data, 'query'),
+			query: tarot_quest_content.value + ',Can you please share some guidance to me?',
+		}),
+	});
+	showLoading.value = false;
+	tarotResult.value = result.data.fortune.replace('\n', '\n\n');
+	window.localStorage.setItem('tarotResultContent', tarotResult.value);
+	resultTime.value = new Date().toTimeString();
 	resultTime.value = date.toLocaleString('en-US', options);
-}
+};
 
 const showPopup = (info) => {
-  Telegram.WebApp.showPopup({
-    title: info.title,
-    message: info.message,
-  });
+	Telegram.WebApp.showPopup({
+		title: info.title,
+		message: info.message,
+	});
 };
 
 const randomTarot = () => {
-  //const resultList = []
-  const cardNumberList = []
-  let count = 0
+	//const resultList = []
+	const cardNumberList = [];
+	let count = 0;
 
-  while (count < 3) {
-    const randomNumber = helper.getRandomNumber(0, 77)
-    if (!cardNumberList.includes(randomNumber)) {
-      count++
-      cardNumberList.push([randomNumber, helper.getRandomNumber(0, 1)])
-    }
-  }
+	while (count < 3) {
+		const randomNumber = helper.getRandomNumber(0, 77);
+		if (!cardNumberList.includes(randomNumber)) {
+			count++;
+			cardNumberList.push([randomNumber, helper.getRandomNumber(0, 1)]);
+		}
+	}
 
-  cardNumberList.forEach(item => {
-    resultListRender.data.push({
-      query: tarotData.tarot[item[0]].name + (item[1] == 0 ? ' upright' : ' reserved'),
-      display: tarotData.tarot[item[0]].name,
-      isReversed: item[1] == 1
-    })
-  })
+	cardNumberList.forEach((item) => {
+		resultListRender.data.push({
+			query: tarotData.tarot[item[0]].name + (item[1] == 0 ? ' upright' : ' reserved'),
+			display: tarotData.tarot[item[0]].name,
+			isReversed: item[1] == 1,
+		});
+	});
 
-  loadTarotData()
-}
+	loadTarotData();
+};
 
 window.Telegram.WebApp.BackButton.isVisible = true;
 onMounted(() => {
-  if (window.localStorage.getItem("canTarabbit") != 0) {
-    randomTarot()
-    window.localStorage.setItem("canTarabbit", "0");
-  } else {
-    // showPopup({
-    //   title: "Warning",
-    //   message: "Do not refresh, you can go to homepage and try again",
-    // });
-  }
-})
+	if (window.localStorage.getItem('canTarabbit') != 0) {
+		randomTarot();
+		window.localStorage.setItem('canTarabbit', '0');
+	} else {
+		// showPopup({
+		//   title: "Warning",
+		//   message: "Do not refresh, you can go to homepage and try again",
+		// });
+	}
+});
 /* const flipCard = () => {
   move(flip2.value).rotateY(180).then(() => {
 
@@ -134,52 +133,54 @@ onMounted(() => {
 } */
 
 const goGetgem = () => {
-  window.Telegram.WebApp.openLink('https://getgems.io/collection/EQDtrxXwzEjCJEHtOvS8lKJBGijjQ0Z8KcteRl89lMywrBTk')
-}
+	window.Telegram.WebApp.openLink('https://getgems.io/collection/EQDtrxXwzEjCJEHtOvS8lKJBGijjQ0Z8KcteRl89lMywrBTk');
+};
 </script>
 
 <template>
-  <Loading :display="showLoading"></Loading>
-  <div class="main-container light-gradient">
-    <div class="iphone-x-light-default"></div>
+	<Loading :display="showLoading"></Loading>
+	<div class="main-container light-gradient">
+		<div class="iphone-x-light-default"></div>
 
-    <div class="nav" v-if="false">
-      <div class="nav-2">
-        <div class="internet">
-          <div class="iconLeft globalHide">
-            <img src="../assets/images/wallet.svg" alt="">
-            <span>100</span>
-          </div>
-          <div class="iconRight">
-            <img src="../assets/images/lang.svg" alt="">
-          </div>
-        </div>
-      </div>
-    </div>
+		<div class="nav" v-if="false">
+			<div class="nav-2">
+				<div class="internet">
+					<div class="iconLeft globalHide">
+						<img src="../assets/images/wallet.svg" alt="" />
+						<span>100</span>
+					</div>
+					<div class="iconRight">
+						<img src="../assets/images/lang.svg" alt="" />
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <div class="middleText">
-      <button class="cta-with-icon">
-<!--        <div class="cards"></div>-->
-        <!-- <span class="whats-my-fortune-today">What’s My Fortune Today?</span> -->
-        <span class="whats-my-fortune-today">{{tarot_quest_content}}</span>
-      </button>
-      <!-- <input type="text" placeholder="input content" v-model="resultListRender?.data[index].query"
+		<div class="middleText">
+			<button class="cta-with-icon">
+				<!--        <div class="cards"></div>-->
+				<!-- <span class="whats-my-fortune-today">What’s My Fortune Today?</span> -->
+				<span class="whats-my-fortune-today">{{ tarot_quest_content }}</span>
+			</button>
+			<!-- <input type="text" placeholder="input content" v-model="resultListRender?.data[index].query"
         v-for="(item, index) in resultListRender.data" :key="index" /> -->
-      <!-- <span class="otherTopics">Other topics</span> -->
-    </div>
+			<!-- <span class="otherTopics">Other topics</span> -->
+		</div>
 
-    <div class="shuffleCard flexCenter">
-      <div class="cardWrap" v-for="(item, index) in 3" :key="index">
-        <img :src="emptyCard" alt="">
-      </div>
-      <div class="cardContent1" :style="{ transform: `rotate(${resultListRender.data[0]?.isReversed ? 180 : 0}deg)` }">
-        {{
-          resultListRender.data[0]?.display }}</div>
-      <div class="cardContent2" :style="{ transform: `rotate(${resultListRender.data[1]?.isReversed ? 180 : 0}deg)` }">
-        {{ resultListRender.data[1]?.display }}</div>
-      <div class="cardContent3" :style="{ transform: `rotate(${resultListRender.data[2]?.isReversed ? 180 : 0}deg)` }">
-        {{ resultListRender.data[2]?.display }}</div>
-      <!-- <div class="cardWrap">
+		<div class="shuffleCard flexCenter">
+			<div class="cardWrap" v-for="(item, index) in 3" :key="index">
+				<img :src="emptyCard" alt="" />
+			</div>
+			<div class="cardContent1" :style="{ transform: `rotate(${resultListRender.data[0]?.isReversed ? 180 : 0}deg)` }">
+				{{ resultListRender.data[0]?.display }}
+			</div>
+			<div class="cardContent2" :style="{ transform: `rotate(${resultListRender.data[1]?.isReversed ? 180 : 0}deg)` }">
+				{{ resultListRender.data[1]?.display }}
+			</div>
+			<div class="cardContent3" :style="{ transform: `rotate(${resultListRender.data[2]?.isReversed ? 180 : 0}deg)` }">
+				{{ resultListRender.data[2]?.display }}
+			</div>
+			<!-- <div class="cardWrap">
         <img :src="heartFill" alt="" ref="flip1">
         <div class="flexCenter backCard1" ref="flip1back"></div>
       </div>
@@ -192,170 +193,171 @@ const goGetgem = () => {
         <img :src="moneyFill" alt="" ref="flip3">
         <div class="flexCenter backCard3" ref="flip3back"></div>
       </div> -->
-    </div>
+		</div>
 
-    <div class="textContent">
-      <div class="time">{{ resultTime }}</div>
-      <div class="middleTextContent"><pre>{{ tarotResult }}</pre></div>
-    </div>
-    <div class="otherTopic flexCenter" @click="navicatePage('questionList')" v-if="true">
-      <div class="otherButton">
-        <span class="content">Other Topics</span>
-      </div>
-    </div>
+		<div class="textContent">
+			<div class="time">{{ resultTime }}</div>
+			<div class="middleTextContent">
+				<pre>{{ tarotResult }}</pre>
+			</div>
+		</div>
+		<div class="otherTopic flexCenter" @click="navicatePage('questionList')" v-if="true">
+			<div class="otherButton">
+				<span class="content">Other Topics</span>
+			</div>
+		</div>
 
-    <div class="atBottom">
-      <div class="rectangle">
-        <router-link to="/">
-          <div class="frame-1">
-            <div class="suit-club-fill">
-              <div class="people-fill">
-                <div class="vector-1"></div>
-              </div>
-            </div>
-            <span class="label-7">Earn <br />Token</span>
-          </div>
-        </router-link>
+		<div class="atBottom">
+			<div class="rectangle">
+				<router-link to="/">
+					<div class="frame-1">
+						<div class="suit-club-fill">
+							<div class="people-fill">
+								<div class="vector-1"></div>
+							</div>
+						</div>
+						<span class="label-7">Earn <br />Token</span>
+					</div>
+				</router-link>
 
-        <router-link to="/boost">
-          <div class="frame-3">
-            <div class="cards-4"></div>
-            <span class="label">Boosts <br />Fortunes</span>
-          </div>
-        </router-link>
+				<router-link to="/boost">
+					<div class="frame-3">
+						<div class="cards-4"></div>
+						<span class="label">Boosts <br />Fortunes</span>
+					</div>
+				</router-link>
 
-        <router-link to="/inviteFriend">
-          <div class="frame-5">
-            <div class="suit-club-fill">
-              <div class="people-fill">
-                <div class="vector-6"></div>
-              </div>
-            </div>
-            <span class="label-7">Invite <br />Friends</span>
-          </div>
-        </router-link>
+				<router-link to="/inviteFriend">
+					<div class="frame-5">
+						<div class="suit-club-fill">
+							<div class="people-fill">
+								<div class="vector-6"></div>
+							</div>
+						</div>
+						<span class="label-7">Invite <br />Friends</span>
+					</div>
+				</router-link>
+			</div>
+		</div>
 
-      </div>
-    </div>
-
-    <div class="bottonText_button flexCenter" @click="goGetgem()">
-      <div class="bottomButton">
-        <span class="content">Collect Genesis Lucky Card</span>
-      </div>
-    </div>
-    <!-- <div class="light-gradient"></div> -->
-  </div>
+		<div class="bottonText_button flexCenter" @click="goGetgem()">
+			<div class="bottomButton">
+				<span class="content">Collect Genesis Lucky Card</span>
+			</div>
+		</div>
+		<!-- <div class="light-gradient"></div> -->
+	</div>
 </template>
 
 <style scoped>
-pre{
-  white-space:pre-wrap;
-  word-wrap:break-word;
+pre {
+	white-space: pre-wrap;
+	word-wrap: break-word;
 }
 
 .bottonText_button {
-  position: relative;
+	position: relative;
 	width: 100%;
 }
 
 .bottomButton .content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  flex-basis: auto;
-  position: relative;
-  width: calc(282* var(--rpx));
-  height: calc(29* var(--rpx));
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(24 * var(--rpx));
-  font-weight: 500;
-  line-height: calc(29 * var(--rpx));
-  text-align: center;
-  white-space: nowrap;
-  z-index: 33;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	flex-basis: auto;
+	position: relative;
+	width: calc(282 * var(--rpx));
+	height: calc(29 * var(--rpx));
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(24 * var(--rpx));
+	font-weight: 500;
+	line-height: calc(29 * var(--rpx));
+	text-align: center;
+	white-space: nowrap;
+	z-index: 33;
 }
 
 .bottomButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: calc(12* var(--rpx));
-  box-sizing: border-box;
-  position: relative;
-  width: 90%;
-  margin: calc(10* var(--rpx)) 0 0 0;
-  padding: calc(15* var(--rpx)) calc(10* var(--rpx)) calc(15* var(--rpx)) calc(10* var(--rpx));
-  cursor: pointer;
-  z-index: 31;
-  box-shadow: calc(-8* var(--rpx)) calc(6* var(--rpx)) calc(5.800000190734863* var(--rpx)) 0 rgba(119, 119, 119, 0.1);
-  color: white;
-  background: rgba(255, 255, 255, 0.3);
-  border: calc(1* var(--rpx)) solid #FFFFFF;
-  border-radius: calc(100* var(--rpx));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	gap: calc(12 * var(--rpx));
+	box-sizing: border-box;
+	position: relative;
+	width: 90%;
+	margin: calc(10 * var(--rpx)) 0 0 0;
+	padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
+	cursor: pointer;
+	z-index: 31;
+	box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
+	color: white;
+	background: rgba(255, 255, 255, 0.3);
+	border: calc(1 * var(--rpx)) solid #ffffff;
+	border-radius: calc(100 * var(--rpx));
 }
 
 .cardContent1 {
-  position: absolute;
-  top: calc(51* var(--rpx));
-  left: calc(64* var(--rpx));
-  z-index: 100;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(13* var(--rpx));
-  width: calc(65* var(--rpx));
-  height: calc(50* var(--rpx));
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  /* transform: rotate(180deg); */
+	position: absolute;
+	top: calc(51 * var(--rpx));
+	left: calc(64 * var(--rpx));
+	z-index: 100;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(13 * var(--rpx));
+	width: calc(65 * var(--rpx));
+	height: calc(50 * var(--rpx));
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
+	/* transform: rotate(180deg); */
 }
 
 .cardContent2 {
-  position: absolute;
-  top: calc(51* var(--rpx));
-  left: calc(185* var(--rpx));
-  z-index: 100;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(13* var(--rpx));
-  width: calc(65* var(--rpx));
-  height: calc(50* var(--rpx));
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
+	position: absolute;
+	top: calc(51 * var(--rpx));
+	left: calc(185 * var(--rpx));
+	z-index: 100;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(13 * var(--rpx));
+	width: calc(65 * var(--rpx));
+	height: calc(50 * var(--rpx));
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
 }
 
 .cardContent3 {
-  position: absolute;
-  top: calc(51* var(--rpx));
-  right: calc(59* var(--rpx));
-  z-index: 100;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(13* var(--rpx));
-  width: calc(65* var(--rpx));
-  height: calc(50* var(--rpx));
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
+	position: absolute;
+	top: calc(51 * var(--rpx));
+	right: calc(59 * var(--rpx));
+	z-index: 100;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(13 * var(--rpx));
+	width: calc(65 * var(--rpx));
+	height: calc(50 * var(--rpx));
+	display: flex;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
 }
 
 .middleText input {
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .main-container {
-  padding-bottom: calc(70* var(--rpx));
+	padding-bottom: calc(70 * var(--rpx));
 }
 
 .middleTextContent {
-  line-height: 130%;
-  /* text-align: justify; */
-  text-align: left; /* 文本水平居中 */
-  margin-top: 0; /* 可选：重置上边距 */
-  margin-bottom: 0; /* 可选：重置下边距 */
+	line-height: 130%;
+	/* text-align: justify; */
+	text-align: left; /* 文本水平居中 */
+	margin-top: 0; /* 可选：重置上边距 */
+	margin-bottom: 0; /* 可选：重置下边距 */
 }
 
 .middleTextContent > pre {
@@ -363,387 +365,383 @@ pre{
 }
 
 .textContent {
-  position: relative;
-  flex-direction: column;
-  display: flex;
-  z-index: 55;
-  box-sizing: border-box;
+	position: relative;
+	flex-direction: column;
+	display: flex;
+	z-index: 55;
+	box-sizing: border-box;
 	width: 100%;
-  padding: 0 5%;
-  align-items: center;
-  justify-content: center;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(22* var(--rpx));
+	padding: 0 5%;
+	align-items: center;
+	justify-content: center;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(22 * var(--rpx));
 }
 
 .textContent .time {
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(16* var(--rpx));
-  margin: calc(30* var(--rpx)) 0;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(16 * var(--rpx));
+	margin: calc(30 * var(--rpx)) 0;
 }
 
 .atBottom {
-  display: flex;
+	display: flex;
 	width: 100%;
-  height: calc(200* var(--rpx));
-  position: relative;
-  top: calc(8* var(--rpx));
-  align-items: center;
-  justify-content: center;
+	height: calc(200 * var(--rpx));
+	position: relative;
+	top: calc(8 * var(--rpx));
+	align-items: center;
+	justify-content: center;
 }
 
 .rectangle {
-  position: absolute;
-  width: 90%;
-  height: calc(134 * var(--rpx));
-  top: calc(23 * var(--rpx));
-  background: rgba(255, 255, 255, 0.2);
-  border: calc(1 * var(--rpx)) solid #ffffff;
-  z-index: 16;
-  border-radius: calc(16 * var(--rpx));
-  box-shadow: 0 calc(6 * var(--rpx)) calc(10 * var(--rpx)) 0 rgba(120, 120, 120, 0.1);
+	position: absolute;
+	width: 90%;
+	height: calc(134 * var(--rpx));
+	top: calc(23 * var(--rpx));
+	background: rgba(255, 255, 255, 0.2);
+	border: calc(1 * var(--rpx)) solid #ffffff;
+	z-index: 16;
+	border-radius: calc(16 * var(--rpx));
+	box-shadow: 0 calc(6 * var(--rpx)) calc(10 * var(--rpx)) 0 rgba(120, 120, 120, 0.1);
 }
 
 /* bootst */
 
 .frame-1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: calc(8 * var(--rpx));
-  position: absolute;
-  /*  width: calc(79 * var(--rpx));
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: calc(8 * var(--rpx));
+	position: absolute;
+	/*  width: calc(79 * var(--rpx));
   height: calc(106 * var(--rpx)); */
-  top: calc(16 * var(--rpx));
-  left: calc(29 * var(--rpx));
-  padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
-  z-index: 17;
+	top: calc(16 * var(--rpx));
+	left: calc(29 * var(--rpx));
+	padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
+	z-index: 17;
 }
 
 .vector-1 {
-  position: relative;
-  width: calc(32.000001907348633 * var(--rpx));
-  height: calc(32.000001907348633 * var(--rpx));
+	position: relative;
+	width: calc(32.000001907348633 * var(--rpx));
+	height: calc(32.000001907348633 * var(--rpx));
 	/* margin: calc(0.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));*/
-  background: url(../assets/images/DollarCoin.png) no-repeat center;
+	background: url(../assets/images/DollarCoin.png) no-repeat center;
 	background-size: calc(32.000001907348633 * var(--rpx)) calc(32.000001907348633 * var(--rpx));
-  z-index: 23;
+	z-index: 23;
 }
 
 .frame-3 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: calc(8 * var(--rpx));
-  position: absolute;
-  /*  width: calc(79 * var(--rpx));
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: calc(8 * var(--rpx));
+	position: absolute;
+	/*  width: calc(79 * var(--rpx));
   height: calc(106 * var(--rpx)); */
-  top: calc(16 * var(--rpx));
+	top: calc(16 * var(--rpx));
 	left: calc(139 * var(--rpx));
-  padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
-  z-index: 17;
+	padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
+	z-index: 17;
 }
 
 .cards-4 {
-  flex-shrink: 0;
-  position: relative;
-  width: calc(30 * var(--rpx));
-  height: calc(30 * var(--rpx));
-  background: url(../assets/images/poker.svg) no-repeat center;
-  background-size: contain;
-  z-index: 18;
+	flex-shrink: 0;
+	position: relative;
+	width: calc(30 * var(--rpx));
+	height: calc(30 * var(--rpx));
+	background: url(../assets/images/poker.svg) no-repeat center;
+	background-size: contain;
+	z-index: 18;
 }
 
 .label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-  /* width: calc(79 * var(--rpx));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	position: relative;
+	/* width: calc(79 * var(--rpx));
   height: calc(48 * var(--rpx)); */
-  color: #ffffff;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(20 * var(--rpx));
-  font-weight: 500;
-  line-height: calc(24 * var(--rpx));
-  text-align: center;
-  text-overflow: initial;
-  z-index: 19;
-  overflow: hidden;
+	color: #ffffff;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(20 * var(--rpx));
+	font-weight: 500;
+	line-height: calc(24 * var(--rpx));
+	text-align: center;
+	text-overflow: initial;
+	z-index: 19;
+	overflow: hidden;
 }
 
 /* invite friends */
 
 .frame-5 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: calc(8 * var(--rpx));
-  position: absolute;
-  width: calc(65 * var(--rpx));
-  height: calc(106 * var(--rpx));
-  top: calc(16 * var(--rpx));
-  right: calc(26 * var(--rpx));
-  padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
-  z-index: 20;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: calc(8 * var(--rpx));
+	position: absolute;
+	width: calc(65 * var(--rpx));
+	height: calc(106 * var(--rpx));
+	top: calc(16 * var(--rpx));
+	right: calc(26 * var(--rpx));
+	padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
+	z-index: 20;
 }
 
 .suit-club-fill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  flex-shrink: 0;
-  gap: calc(10 * var(--rpx));
-  position: relative;
-  width: calc(30.000001907348633 * var(--rpx));
-  background: rgba(255, 255, 255, 0);
-  z-index: 21;
-  border-radius: calc(4 * var(--rpx));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	flex-shrink: 0;
+	gap: calc(10 * var(--rpx));
+	position: relative;
+	width: calc(30.000001907348633 * var(--rpx));
+	background: rgba(255, 255, 255, 0);
+	z-index: 21;
+	border-radius: calc(4 * var(--rpx));
 }
 
 .people-fill {
-  flex-shrink: 0;
-  position: relative;
-  width: calc(30.000001907348633 * var(--rpx));
-  height: calc(30 * var(--rpx));
-  z-index: 22;
+	flex-shrink: 0;
+	position: relative;
+	width: calc(30.000001907348633 * var(--rpx));
+	height: calc(30 * var(--rpx));
+	z-index: 22;
 }
 
 .vector-6 {
-  position: relative;
-  width: calc(25.000001907348633 * var(--rpx));
-  height: calc(22.502517700195312 * var(--rpx));
-  margin: calc(3.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
-  background: url(../assets/images/people.svg) no-repeat center;
-  background-size: 100vw 100%;
-  z-index: 23;
+	position: relative;
+	width: calc(25.000001907348633 * var(--rpx));
+	height: calc(22.502517700195312 * var(--rpx));
+	margin: calc(3.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
+	background: url(../assets/images/people.svg) no-repeat center;
+	background-size: 100vw 100%;
+	z-index: 23;
 }
 
 .label-7 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-  /* width: calc(65 * var(--rpx));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	position: relative;
+	/* width: calc(65 * var(--rpx));
   height: calc(48 * var(--rpx)); */
-  color: #ffffff;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(20 * var(--rpx));
-  font-weight: 500;
-  line-height: calc(24 * var(--rpx));
-  text-align: center;
-  text-overflow: initial;
-  z-index: 24;
-  overflow: hidden;
+	color: #ffffff;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(20 * var(--rpx));
+	font-weight: 500;
+	line-height: calc(24 * var(--rpx));
+	text-align: center;
+	text-overflow: initial;
+	z-index: 24;
+	overflow: hidden;
 }
 
 .internet {
-  position: relative;
-  box-sizing: border-box;
-  padding: 0 calc(25 * var(--rpx));
-  z-index: 13;
-  display: flex;
-  color: white;
-  justify-content: space-between;
+	position: relative;
+	box-sizing: border-box;
+	padding: 0 calc(25 * var(--rpx));
+	z-index: 13;
+	display: flex;
+	color: white;
+	justify-content: space-between;
 	width: 100%;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(18 * var(--rpx));
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(18 * var(--rpx));
 }
 
 .cardWrap {
-  z-index: 61;
-  position: relative;
-
+	z-index: 61;
+	position: relative;
 }
 
 .backCard2 {
-  position: absolute;
-  top: 0;
-  background-color: white;
-  width: calc(100* var(--rpx));
-  height: calc(167* var(--rpx));
-  transform: rotateY(180deg);
-  z-index: 100;
-  color: #010007;
-  border-radius: calc(10 * var(--rpx));
+	position: absolute;
+	top: 0;
+	background-color: white;
+	width: calc(100 * var(--rpx));
+	height: calc(167 * var(--rpx));
+	transform: rotateY(180deg);
+	z-index: 100;
+	color: #010007;
+	border-radius: calc(10 * var(--rpx));
 }
 
 .shuffleCard {
 	width: 100%;
-  position: relative;
-  margin-top: calc(40 * var(--rpx));
-  display: flex;
-  align-items: center;
-  gap: calc(20 * var(--rpx));
-  justify-content: center;
+	position: relative;
+	margin-top: calc(40 * var(--rpx));
+	display: flex;
+	align-items: center;
+	gap: calc(20 * var(--rpx));
+	justify-content: center;
 }
 
 .shuffleCard img {
-  z-index: 101;
-  width: calc(100 * var(--rpx));
-  object-fit: contain;
-  box-sizing: border-box;
-  /* border: calc(1 * var(--rpx)) solid #141414; */
-  top: 0;
-  position: relative;
-  backface-visibility: hidden;
+	z-index: 101;
+	width: calc(100 * var(--rpx));
+	object-fit: contain;
+	box-sizing: border-box;
+	/* border: calc(1 * var(--rpx)) solid #141414; */
+	top: 0;
+	position: relative;
+	backface-visibility: hidden;
 }
 
 .bottonText {
-  position: absolute;
-  bottom: calc(100 * var(--rpx));
+	position: absolute;
+	bottom: calc(100 * var(--rpx));
 	width: 100%;
 }
 
 .otherButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: calc(12 * var(--rpx));
-  box-sizing: border-box;
-  position: relative;
-  width: 90%;
-  margin: calc(58 * var(--rpx)) 0 0 0;
-  padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
-  cursor: pointer;
-  z-index: 31;
-  box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
-  color: white;
-  background: rgba(255, 255, 255, 0.3);
-  border: calc(1 * var(--rpx)) solid #FFFFFF;
-  border-radius: calc(100 * var(--rpx));
-  font-size: calc(24 * var(--rpx));
-  font-family: Lato, var(--default-font-family);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	gap: calc(12 * var(--rpx));
+	box-sizing: border-box;
+	position: relative;
+	width: 90%;
+	margin: calc(58 * var(--rpx)) 0 0 0;
+	padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
+	cursor: pointer;
+	z-index: 31;
+	box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
+	color: white;
+	background: rgba(255, 255, 255, 0.3);
+	border: calc(1 * var(--rpx)) solid #ffffff;
+	border-radius: calc(100 * var(--rpx));
+	font-size: calc(24 * var(--rpx));
+	font-family: Lato, var(--default-font-family);
 }
 
 .iconLeft {
-  display: flex;
-  align-items: center;
-
+	display: flex;
+	align-items: center;
 }
 
 .iconLeft img {
-  margin-right: calc(10 * var(--rpx));
-  width: calc(25 * var(--rpx));
+	margin-right: calc(10 * var(--rpx));
+	width: calc(25 * var(--rpx));
 }
 
 .iconRight img {
-  width: calc(30 * var(--rpx));
+	width: calc(30 * var(--rpx));
 }
 
 .flexCenter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .middleText {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .middleText .otherTopics {
-  z-index: 51;
-  color: white;
-  margin-top: calc(18 * var(--rpx));
-  margin-right: calc(30 * var(--rpx));
-  align-self: flex-end;
+	z-index: 51;
+	color: white;
+	margin-top: calc(18 * var(--rpx));
+	margin-right: calc(30 * var(--rpx));
+	align-self: flex-end;
 }
 
 .level {
-  flex-direction: column;
+	flex-direction: column;
 }
 
 .circleEye {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	position: relative;
 }
-
-
 
 input,
 select,
 textarea,
 button {
-  outline: 0;
+	outline: 0;
 }
 
 .main-container {
 	width: 100%;
-  /* background: #010007; */
+	/* background: #010007; */
 }
 
 .iphone-x-light-default {
-  position: relative;
-  width: 100%;
-  height: calc(10 * var(--rpx));
-  margin: 0 0 0 0;
-  z-index: 1;
-  overflow: hidden;
+	position: relative;
+	width: 100%;
+	height: calc(10 * var(--rpx));
+	margin: 0 0 0 0;
+	z-index: 1;
+	overflow: hidden;
 }
 
 .cta-with-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  gap: calc(12 * var(--rpx));
-  box-sizing: border-box;
-  position: relative;
-  width: 93%;
-  margin: calc(35 * var(--rpx)) 0 0 0;
-  padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
-  cursor: pointer;
-  background: #ffffff;
-  border: calc(1 * var(--rpx)) solid #ffffff;
-  z-index: 31;
-  overflow: hidden;
-  border-radius: calc(100 * var(--rpx));
-  box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	gap: calc(12 * var(--rpx));
+	box-sizing: border-box;
+	position: relative;
+	width: 93%;
+	margin: calc(35 * var(--rpx)) 0 0 0;
+	padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
+	cursor: pointer;
+	background: #ffffff;
+	border: calc(1 * var(--rpx)) solid #ffffff;
+	z-index: 31;
+	overflow: hidden;
+	border-radius: calc(100 * var(--rpx));
+	box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
 }
 
 .cards {
-  flex-shrink: 0;
-  position: relative;
-  width: calc(30 * var(--rpx));
-  height: calc(30 * var(--rpx));
-  background: url(../assets/images/poker_blue.svg) no-repeat center;
-  background-size: contain;
-  z-index: 32;
+	flex-shrink: 0;
+	position: relative;
+	width: calc(30 * var(--rpx));
+	height: calc(30 * var(--rpx));
+	background: url(../assets/images/poker_blue.svg) no-repeat center;
+	background-size: contain;
+	z-index: 32;
 }
 
 .whats-my-fortune-today {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  flex-basis: auto;
-  position: relative;
-  white-space: normal;      /* 允许换行 */
-  overflow-wrap: break-word; /* 单词内换行 */
-  word-wrap: break-word;     /* 老版本的word-wrap属性 */
-  width: 96%;
-  height: calc(29 * var(--rpx));
-  color: #2a272b;
-  font-family: Lato, var(--default-font-family);
-  font-size: calc(24 * var(--rpx));
-  font-weight: 500;
-  line-height: calc(29 * var(--rpx));
-  text-align: center;
-  //white-space: nowrap;
-  z-index: 33;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	flex-basis: auto;
+	position: relative;
+	white-space: normal; /* 允许换行 */
+	overflow-wrap: break-word; /* 单词内换行 */
+	word-wrap: break-word; /* 老版本的word-wrap属性 */
+	width: 96%;
+	height: calc(29 * var(--rpx));
+	color: #2a272b;
+	font-family: Lato, var(--default-font-family);
+	font-size: calc(24 * var(--rpx));
+	font-weight: 500;
+	line-height: calc(29 * var(--rpx));
+	text-align: center;
+	/* white-space: nowrap; */
+	z-index: 33;
 }
 
 /* .light-gradient {
@@ -756,12 +754,12 @@ button {
 } */
 
 .vector-6 {
-  position: relative;
-  width: calc(25.000001907348633 * var(--rpx));
-  height: calc(22.502517700195312 * var(--rpx));
-  margin: calc(3.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
-  background: url(../assets/images/people.svg) no-repeat center;
-  background-size: 100vw 100%;
-  z-index: 23;
+	position: relative;
+	width: calc(25.000001907348633 * var(--rpx));
+	height: calc(22.502517700195312 * var(--rpx));
+	margin: calc(3.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
+	background: url(../assets/images/people.svg) no-repeat center;
+	background-size: 100vw 100%;
+	z-index: 23;
 }
 </style>

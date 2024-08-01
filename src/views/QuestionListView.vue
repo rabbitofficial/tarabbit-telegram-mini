@@ -73,7 +73,7 @@ window.scrollTo(0, 0);
   width: 100vw; /* 宽度设置为视口宽度 */
   height: 100vh; /* 高度设置为视口高度 */
   background-color: #f0f0f0; /* 例如，设置背景颜色 */
-  //background-image: url('your-image.jpg'); /* 背景图片 */
+  /* background-image: url('your-image.jpg'); */
   background-size: cover; /* 背景图片覆盖整个元素 */
   background-position: center; /* 背景图片居中显示 */
   background-repeat: no-repeat; /* 背景图片不重复 */
@@ -83,7 +83,7 @@ window.scrollTo(0, 0);
 .carousel-container {
   overflow: hidden;
   width: 100vw;
-  //height: 100%; /* 根据需要调整 */
+  /* height: 100%;  */
   position: relative;
 }
 
@@ -138,9 +138,9 @@ window.scrollTo(0, 0);
   align-items: center;
   font-size: large;
   padding: calc(10 * var(--rpx)) calc(20 * var(--rpx));
-  //gap: 10px;
+  /* gap: 10px; */
   width: auto;
-  //color: #010007;
+  /* color: #010007; */
   color: white;
   border: 1px solid white;
   background: rgba(255, 255, 255, 0.2);
