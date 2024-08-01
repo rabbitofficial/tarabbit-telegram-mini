@@ -8,6 +8,10 @@ import helper from '@/utils/helper';
 const router = useRouter()
 const route = useRoute()
 const cardDoms = []
+const editableText = ref(window.localStorage.getItem("tarot_question_content"))
+if (!editableText.value) {
+  editableText.value = "What’s My Fortune Today?"
+}
 const canClick = ref(true)
 helper.test()
 const setItemRefs = (el, item) => {
@@ -16,7 +20,10 @@ const setItemRefs = (el, item) => {
     el,
   })
 }
-
+const updateText = (event) => {
+  editableText.value = event.target.textContent;
+  window.localStorage.setItem("tarot_question_content", editableText.value);
+}
 const navicatePage = (page) => {
   router.push(`/${page}`)
 }
@@ -74,8 +81,15 @@ const shuffle = () => {
 
     <div class="middleText">
       <button class="cta-with-icon">
-        <div class="cards"></div>
-        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
+<!--        <div class="cards"></div>-->
+<!--        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>-->
+        <div class="whats-my-fortune-today"
+            contenteditable="false"
+             @keyup.enter="updateText"
+             @focus="selectAllText"
+            :textContent="editableText"
+            ref="editableDiv"
+        ></div>
       </button>
       <span class="otherTopics" @click="navicatePage('questionList')" v-if="false">Other topics</span>
     </div>
@@ -293,7 +307,10 @@ button {
   flex-shrink: 0;
   flex-basis: auto;
   position: relative;
-  width: calc(282 * var(--rpx));
+  white-space: normal;      /* 允许换行 */
+  overflow-wrap: break-word; /* 单词内换行 */
+  word-wrap: break-word;     /* 老版本的word-wrap属性 */
+  width: 96%;
   height: calc(29 * var(--rpx));
   color: #2a272b;
   font-family: Lato, var(--default-font-family);
@@ -301,7 +318,7 @@ button {
   font-weight: 500;
   line-height: calc(29 * var(--rpx));
   text-align: center;
-  white-space: nowrap;
+  //white-space: nowrap;
   z-index: 33;
 }
 

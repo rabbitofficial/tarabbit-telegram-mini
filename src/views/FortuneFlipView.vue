@@ -3,6 +3,7 @@ import heartFill from '../assets/images/heartFill.svg';
 import hatFill from '../assets/images/hatFill.svg';
 import moneyFill from '../assets/images/moneyFill.svg';
 import doubleHands from '../assets/images/doubleHands.svg';
+import rabbit from '../assets/images/rabbit.svg';
 import cross from '../assets/images/cross.svg';
 import { ref, onMounted, reactive } from 'vue';
 import helper from '@/utils/helper';
@@ -25,6 +26,7 @@ const getTgInfo = async (id) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "get",
     url: helper.baseUrl + "telegram/api/tg/login/fetch?tg_id=" + id,
@@ -49,10 +51,15 @@ const showMyPopup = (info) => {
   });
 };
 
+const tarot_quest_content = ref(window.localStorage.getItem("tarot_question_content"))
+if (!tarot_quest_content.value) {
+  tarot_quest_content.value = "What’s My Fortune Today?"
+}
 const updateTgInfo = async () => {
   showLoading.value = true
   const result = await axios({
     headers: {
+      "ngrok-skip-browser-warning": true,
       'Content-Type': 'application/json'
     },
     method: 'post',
@@ -77,7 +84,11 @@ const resetDefault = (dom) => {
 }
 const flip2 = ref(null)
 const flip2back = ref(null)
-
+const inviteFriend = () => {
+  const webAppLink = `${helper.inviteLink}?startapp=` + window.Telegram.WebApp.initDataUnsafe.user.id
+  const receivedContent = "Invite Friends to get more points"
+  window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${webAppLink}&text=${receivedContent}`);
+}
 const flipCard = () => {
   move(flip2.value).rotateY(180).then(() => {
 
@@ -91,6 +102,7 @@ const flipCard = () => {
 }
 
 
+const showCard = ref(false)
 const checkBalance = async () => {
   //showPopup.value = true
   if (userInfoVue.data.points >= 50) {
@@ -99,10 +111,11 @@ const checkBalance = async () => {
     window.localStorage.setItem("canTarabbit", "1");
     navicateReplacePage('result')
   } else {
-    showMyPopup({
-      title: "Warning",
-      message: "Not enought points",
-    });
+    showCard.value = true
+    // showMyPopup({
+    //   title: "Warning",
+    //   message: "Not enought points",
+    // });
   }
 
 }
@@ -132,12 +145,33 @@ const checkResult = () => {
 
     <div class="middleText">
       <button class="cta-with-icon">
-        <div class="cards"></div>
-        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
+<!--        <div class="cards"></div>-->
+        <span class="whats-my-fortune-today">{{ tarot_quest_content }}</span>
       </button>
       <!-- <span class="otherTopics">Other topics</span> -->
     </div>
 
+    <div id="app">
+      <transition name="slide-up">
+        <div v-if="showCard" class="card">
+          <div class="card-header">
+            <button @click="showCard = false" class="close-btn" style="color: white;">X</button>
+          </div>
+          <div class="card-body">
+            <!-- Card content goes here -->
+            <div style="position: absolute;font-size: 2.2rem;text-align: center;top: 8%;left: 37%">Oops!</div>
+            <div><img :src="rabbit" style="position: absolute;left:39%;width: 20%;height: auto;top: 22%;" alt=""></div>
+            <div style="position: absolute;font-size: 1.0rem;text-align: center;top: 67%;left:25%">You don't have enough token</div>
+              <div class="bottonText flexCenter" @click="inviteFriend()">
+                <div class="bottomButton"
+                     style="background: linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.28) 40%);">
+                  <span class="content">Invite Friends to Earn!</span>
+                </div>
+              </div>
+          </div>
+        </div>
+      </transition>
+    </div>
     <div class="shuffleCard flexCenter">
       <div class="cardWrap">
         <img :src="heartFill" alt="" ref="flip1" @click="checkBalance()">
@@ -175,6 +209,83 @@ const checkResult = () => {
 </template>
 
 <style scoped>
+
+
+.bottonText {
+  position: absolute;
+  bottom: calc(50 * var(--rpx));
+  width: 100%;
+}
+
+.bottomButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  bottom: 25%;
+  gap: calc(12 * var(--rpx));
+  box-sizing: border-box;
+  position: fixed;
+  //right: 2%;
+  width: 85%;
+  margin: calc(58 * var(--rpx)) 0 0 0;
+  padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
+  cursor: pointer;
+  z-index: 31;
+  box-shadow: calc(-8 * var(--rpx)) calc(6 * var(--rpx)) calc(5.800000190734863 * var(--rpx)) 0 rgba(119, 119, 119, 0.1);
+  color: white;
+//background: linear-gradient(90deg, rgba(220, 130, 151, 0.8) 0%, rgba(98, 27, 170, 0.8) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.28) 40%);
+  border: calc(1 * var(--rpx)) solid #FFFFFF;
+  border-radius: calc(100 * var(--rpx));
+  font-size: calc(24 * var(--rpx));
+  height: calc(47 * var(--rpx));
+}
+
+
+.card {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 70%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px 8px 0 0;
+  overflow-y: auto;
+  z-index: 1000;
+  background-image: url('../assets/images/oppsBG.svg'); /* 替换为实际的图片路径 */
+  background-size: cover; /* 使图片覆盖整个卡片背景 */
+  background-position: center; /* 图片居中显示 */
+}
+
+.card-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-up-enter,
+.slide-up-leave-to /* .slide-up-leave-active in <2.1.8 */ {
+  transform: translateY(100%);
+}
+
+
 .popupBalance .cross {
   position: absolute;
   top: 0;
@@ -443,7 +554,10 @@ button {
   flex-shrink: 0;
   flex-basis: auto;
   position: relative;
-  width: calc(282 * var(--rpx));
+  white-space: normal;      /* 允许换行 */
+  overflow-wrap: break-word; /* 单词内换行 */
+  word-wrap: break-word;     /* 老版本的word-wrap属性 */
+  width: 96%;
   height: calc(29 * var(--rpx));
   color: #2a272b;
   font-family: Lato, var(--default-font-family);
@@ -451,7 +565,7 @@ button {
   font-weight: 500;
   line-height: calc(29 * var(--rpx));
   text-align: center;
-  white-space: nowrap;
+  //white-space: nowrap;
   z-index: 33;
 }
 

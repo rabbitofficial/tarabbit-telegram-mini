@@ -1,17 +1,26 @@
 <script setup>
-import { onMounted, ref, reactive } from "vue";
+import { TonConnectUI } from '@tonconnect/ui';
+import { THEME } from '@tonconnect/ui';
+import { onMounted, ref, reactive, getCurrentInstance } from 'vue';
 import { useI18n } from "vue-i18n";
 import Loading from "@/components/Loading.vue";
+import questionList from '@/utils/tgGlobalSetting';
+
 const { t, locale } = useI18n({ useScope: "global" });
 import helper from "@/utils/helper";
 import axios from "axios";
 //https://vue-i18n.intlify.dev/guide/advanced/composition.html
 const circleEle = ref(null);
 const plusPoint = ref(null);
+// const homeLeft = ref(null);
+const ctaBtn = ref(null);
 const eyeOn = ref(false);
 const canRoll = ref(true);
 const showLoading = ref(true);
+const rotateing = ref(false);
 
+const { appContext } = getCurrentInstance();
+const tonConnectUI = appContext.config.globalProperties.$tonConnect;
 const userInfoVue = reactive({ data: {} });
 
 const showPopup = (info) => {
@@ -24,11 +33,14 @@ const showPopup = (info) => {
 const changeLang = () => {
   locale.value = "ja1";
 };
-
+const index = Math.floor(Math.random() * questionList.length);
+const randomQuestion = ref(questionList[index].title);
+window.localStorage.setItem("tarot_question_content", randomQuestion.value);
 const sendTgInfo = async (user) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "post",
     url: helper.baseUrl + "telegram/api/tg/login",
@@ -46,6 +58,7 @@ const updateUserInfo = async (info) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "post",
     url: helper.baseUrl + "telegram/api/tg/login/update",
@@ -53,12 +66,14 @@ const updateUserInfo = async (info) => {
       ...info
     }),
   });
+  userInfoVue.data = await getTgInfo(window.Telegram.WebApp.initDataUnsafe.user.id);
 };
 
 const addReferalInfo = async (addInfo) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "post",
     url: helper.baseUrl + "referral/api/referral",
@@ -72,6 +87,7 @@ const getTgInfo = async (id) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "get",
     url:
@@ -87,6 +103,7 @@ const getReferInfo = async (id) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "get",
     url:
@@ -112,27 +129,32 @@ onMounted(async () => {
       (item) => item.referred_id == Telegram.WebApp.initDataUnsafe.user.id
     );
     if (!already_invited) {
-      const referrerInfo = await getTgInfo(startParam)
-      await updateUserInfo({
-        tg_id: startParam,
-        points: referrerInfo.points + 150
-      });
+      // const referrerInfo = await getTgInfo(startParam)
+      // await updateUserInfo({
+      //   tg_id: startParam,
+      //   points: referrerInfo.points + 2000
+      // });
+        await addReferalInfo({
+          referrer_id: startParam.toString(),
+          referred_id: window.Telegram.WebApp.initDataUnsafe.user.id.toString(),
+        });
     }
-    await addReferalInfo({
-      referrer_id: startParam.toString(),
-      referred_id: window.Telegram.WebApp.initDataUnsafe.user.id.toString(),
-    });
   }
 
   showLoading.value = false;
 });
 
+const connectedWallet = async () => {
+	const connectedWallet = await tonConnectUI.connectWallet();
+	console.log(connectedWallet);
+};
 const testNetwork = async () => {
   console.log(123123);
   //const result = await axios.post(helper.baseUrl + 'fortune/check-my-fortune',
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "post",
     url: helper.baseUrl + "fortune/check-my-fortune",
@@ -178,8 +200,10 @@ const roll = async () => {
 
   userInfoVue.data.left_roll_times -= 1;
   canRoll.value = false;
+	eyeOn.value = false;
+	// move(homeLeft.value).duration(800).set('opacity', '0').end();
   move(circleEle.value)
-    .duration(1200)
+		.duration(2000)
     .rotate(360 * 10)
     .ease("in")
     .end(() => {
@@ -190,6 +214,7 @@ const roll = async () => {
         .set("opacity", "1")
         .ease("in")
         .end(() => {
+					eyeOn.value = true;
           move(plusPoint.value)
             .duration(400)
             .y(-150)
@@ -207,13 +232,17 @@ const roll = async () => {
         .rotate(360 * 20)
         .ease("out")
         .end(async () => {
-          userInfoVue.data.points += 100;
+          userInfoVue.data.points += 1000;
           canRoll.value = true;
+          rotateing.value = false;
           await updateUserInfo({
             tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
             points: userInfoVue.data.points,
             left_roll_times: userInfoVue.data.left_roll_times,
           });
+					setTimeout(() => {
+						eyeOn.value = false;
+					}, 2000);
         });
     });
 };
@@ -221,8 +250,9 @@ const roll = async () => {
 
 <template>
   <Loading :display="showLoading"></Loading>
-  <div class="main-container light-gradient">
+  <div class="main-container light-gradient" style="height: 90%">
     <div class="iphone-x-light-default"></div>
+		<img src="../assets/images/wallet.svg" @click="connectedWallet" style="margin-left: 15px" />
     <div class="nav" v-if="false">
       <div class="nav-2">
         <div class="internet">
@@ -242,7 +272,8 @@ const roll = async () => {
     </div>
 
     <div class="circleEye">
-      <div class="plusPoint" ref="plusPoint">+100</div>
+			<img v-if="false" ref="homeLeft" class="home-left" src="../assets/images/homeLeft.png" alt="" srcset=""/>
+      <div class="plusPoint" ref="plusPoint">+1000</div>
       <div class="combine" ref="circleEle">
         <div class="openEye">
           <img class="open" src="../assets/images/eyeOpen.png" alt="" v-if="eyeOn" />
@@ -258,8 +289,8 @@ const roll = async () => {
     <router-link to="/fortune">
       <div class="middleText">
         <button class="cta-with-icon">
-          <div class="cards"></div>
-          <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
+<!--          <div class="cards"></div>-->
+          <span class="whats-my-fortune-today">{{ randomQuestion }}</span>
         </button>
       </div>
     </router-link>
@@ -380,6 +411,14 @@ const roll = async () => {
   position: relative;
 }
 
+.circleEye .home-left {
+	width: 60px;
+	height: 95px;
+	position: absolute;
+	left: 48px;
+	bottom: 54px;
+	z-index: 990;
+}
 .hand {
   z-index: 60;
   position: absolute;
@@ -523,7 +562,10 @@ button {
   flex-shrink: 0;
   flex-basis: auto;
   position: relative;
-  width: calc(282 * var(--rpx));
+  white-space: normal;      /* 允许换行 */
+  overflow-wrap: break-word; /* 单词内换行 */
+  word-wrap: break-word;     /* 老版本的word-wrap属性 */
+  width: 98%;
   height: calc(29 * var(--rpx));
   color: #2a272b;
   font-family: Lato, var(--default-font-family);
@@ -531,7 +573,7 @@ button {
   font-weight: 500;
   line-height: calc(29 * var(--rpx));
   text-align: center;
-  white-space: nowrap;
+  //white-space: nowrap;
   z-index: 33;
 }
 
@@ -710,5 +752,9 @@ button {
   text-align: center;
   white-space: nowrap;
   z-index: 29;
+}
+
+.ton-connect button {
+	background-color: red;
 }
 </style>
