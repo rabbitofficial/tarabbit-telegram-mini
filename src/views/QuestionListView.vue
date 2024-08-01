@@ -1,51 +1,39 @@
 <script setup>
 import { reactive } from 'vue';
 
-const questionList = reactive([
-  {
-    title: 'Did I meet the one?'
-  },
-  {
-    title: 'How’s my luck today?'
-  },
-  {
-    title: 'Will i P Pass my exam? '
-  },
-  {
-    title: 'Will I get the job? '
-  },
-  {
-    title: 'Will I? '
-  },
-  {
-    title: 'What’s My Fortune Today?'
-  },
-  {
-    title: 'What’s My Fortay334 34234 ?'
-  },
-  {
-    title: 'What’s My Fortay334 34234 ?'
-  },
-  {
-    title: 'What’s My Fortay334 34234 ?'
-  },
-  {
-    title: 'What’s My Fortay334 34234 ?'
-  },
-  {
-    title: 'What’s My Fortay334 34234 ?'
-  },
-  {
-    title: 'What’s My Fortay334 34234 ?'
-  },
-  {
-    title: 'What’s?'
-  }
-])
+import questionList from '@/utils/tgGlobalSetting';
+window.Telegram.WebApp.BackButton.isVisible = true;
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const navicatePage = (page) => {
+  router.replace(`/${page}`)
+}
+const changeQuestion = (content) =>{
+  window.localStorage.setItem("tarot_question_content", content);
+  navicatePage(`fortune`)
+}
+const newQuestionList= [];
+newQuestionList.push(...questionList)
+newQuestionList.push(...questionList)
+newQuestionList.push(...questionList)
+
+const numRows = 3
+const rows = Array.from({ length: numRows }, (_, i) =>
+    newQuestionList.filter((_, index) => index % numRows === i)
+);
+
+
+const getRowStyle = (index) => {
+  const speeds = [30, 35, 42]; // 不同行的速度（秒）
+  return {
+    animationDuration: `${speeds[index % speeds.length]}s`
+  };
+}
+window.scrollTo(0, 0);
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main-container" style="width: 100vw;height: 100vh">
     <div class="iphone-x-light-default"></div>
     <div class="nav" v-if="false">
       <div class="nav-2">
@@ -62,14 +50,69 @@ const questionList = reactive([
 
     <div class="title">Choose a question?</div>
 
-    <div class="randomQuestion">
-      <div v-for="(item, index) in questionList" :key="index" class="subQuestion">{{ item.title }}</div>
+<!--    <div class="randomQuestion">-->
+<!--      <div v-for="(item, index) in questionList" :key="index" class="subQuestion" @click="changeQuestion(item.title)">{{ item.title }}</div>-->
+<!--    </div>-->
+
+    <div class="carousel-container" >
+      <div class="carousel">
+        <div class="carousel-row" v-for="(row, index2) in rows" :key="index2" :style="getRowStyle(index2)">
+          <button v-for="(item, index) in row" :key="index"  @click="changeQuestion(item.title)"   class="subQuestion"  >{{ item.title }} </button>
+        </div>
+      </div>
     </div>
-    <div class="light-gradient"></div>
+<!--    <div class="light-gradient"></div>-->
   </div>
 </template>
 
 <style scoped>
+.background {
+  position: fixed; /* 固定位置 */
+  top: 0;
+  left: 0;
+  width: 100vw; /* 宽度设置为视口宽度 */
+  height: 100vh; /* 高度设置为视口高度 */
+  background-color: #f0f0f0; /* 例如，设置背景颜色 */
+  //background-image: url('your-image.jpg'); /* 背景图片 */
+  background-size: cover; /* 背景图片覆盖整个元素 */
+  background-position: center; /* 背景图片居中显示 */
+  background-repeat: no-repeat; /* 背景图片不重复 */
+}
+
+
+.carousel-container {
+  overflow: hidden;
+  width: 100vw;
+  //height: 100%; /* 根据需要调整 */
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-row {
+  display: flex;
+  justify-content: flex-start;
+  white-space: nowrap;
+  gap: 10px;
+  animation: scroll-horizontal linear infinite;
+}
+
+@keyframes scroll-horizontal {
+  from {
+    transform: translateX(-350%);
+  }
+  to {
+    transform: translateX(30%);
+  }
+}
+
+
+
+
+
 .main-container {
   box-sizing: border-box;
   width: 100%;
@@ -93,11 +136,14 @@ const questionList = reactive([
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  font-size: large;
   padding: calc(10 * var(--rpx)) calc(20 * var(--rpx));
-  gap: 10px;
+  //gap: 10px;
   width: auto;
-  color: #010007;
-  background: #FFFFFF;
+  //color: #010007;
+  color: white;
+  border: 1px solid white;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: calc(100 * var(--rpx));
   margin-top: calc(10 * var(--rpx));
   box-sizing: border-box;

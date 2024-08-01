@@ -13,6 +13,12 @@ const navicatePage = (page) => {
   router.push(`/${page}`)
 }
 const resultListRender = reactive({ data: [] })
+
+const tarot_quest_content = ref(window.localStorage.getItem("tarot_question_content"))
+if (!tarot_quest_content.value) {
+  tarot_quest_content.value = "What’s My Fortune Today?"
+}
+
 /* poker logic */
 /* const allCards = import.meta.glob("@/assets/cards/*.svg", { eager: true }); 
 const cardList = reactive({ list: [] })
@@ -41,13 +47,20 @@ const queryContent = reactive({
   "tarotCards": ["The Fool upright", "The Magician reserved", "The High Priestess"],
   "query": "Can you please share some guidance to me in 6 months?"
 }) */
-const resultTime = ref(new Date().toTimeString())
-const tarotResult = ref(``)
+const options = {
+	timeZoneName: 'short',
+	hour12: false,
+};
+const date = new Date();
+
+const resultTime = ref(date.toLocaleString('en-US', options));
+const tarotResult = ref(window.localStorage.getItem("tarotResultContent") )
 
 const loadTarotData = async () => {
   showLoading.value = true
   const result = await axios({
     headers: {
+      "ngrok-skip-browser-warning": true,
       'Content-Type': 'application/json'
     },
     method: 'post',
@@ -55,12 +68,14 @@ const loadTarotData = async () => {
     data: JSON.stringify({
       "userId": window.Telegram.WebApp.initDataUnsafe.user.id,
       "tarotCards": _.pluck(resultListRender.data, 'query'),
-      "query": "Can you please share some guidance to me in 6 months?"
+      "query": tarot_quest_content.value+",Can you please share some guidance to me?"
     })
   })
   showLoading.value = false
-  tarotResult.value = result.data.fortune
+  tarotResult.value = result.data.fortune.replace("\n","\n\n")
+  window.localStorage.setItem("tarotResultContent", tarotResult.value);
   resultTime.value = new Date().toTimeString()
+	resultTime.value = date.toLocaleString('en-US', options);
 }
 
 const showPopup = (info) => {
@@ -94,16 +109,16 @@ const randomTarot = () => {
   loadTarotData()
 }
 
-window.Telegram.WebApp.BackButton.isVisible = false;
+window.Telegram.WebApp.BackButton.isVisible = true;
 onMounted(() => {
   if (window.localStorage.getItem("canTarabbit") != 0) {
     randomTarot()
     window.localStorage.setItem("canTarabbit", "0");
   } else {
-    showPopup({
-      title: "Warning",
-      message: "Do not refresh, you can go to homepage and try again",
-    });
+    // showPopup({
+    //   title: "Warning",
+    //   message: "Do not refresh, you can go to homepage and try again",
+    // });
   }
 })
 /* const flipCard = () => {
@@ -144,9 +159,9 @@ const goGetgem = () => {
 
     <div class="middleText">
       <button class="cta-with-icon">
-        <div class="cards"></div>
+<!--        <div class="cards"></div>-->
         <!-- <span class="whats-my-fortune-today">What’s My Fortune Today?</span> -->
-        <span class="whats-my-fortune-today">What’s My Fortune Today?</span>
+        <span class="whats-my-fortune-today">{{tarot_quest_content}}</span>
       </button>
       <!-- <input type="text" placeholder="input content" v-model="resultListRender?.data[index].query"
         v-for="(item, index) in resultListRender.data" :key="index" /> -->
@@ -181,11 +196,9 @@ const goGetgem = () => {
 
     <div class="textContent">
       <div class="time">{{ resultTime }}</div>
-      <div class="middleTextContent">
-        {{ tarotResult }}
-      </div>
+      <div class="middleTextContent"><pre>{{ tarotResult }}</pre></div>
     </div>
-    <div class="otherTopic flexCenter" @click="navicatePage('questionList')" v-if="false">
+    <div class="otherTopic flexCenter" @click="navicatePage('questionList')" v-if="true">
       <div class="otherButton">
         <span class="content">Other Topics</span>
       </div>
@@ -235,9 +248,14 @@ const goGetgem = () => {
 </template>
 
 <style scoped>
+pre{
+  white-space:pre-wrap;
+  word-wrap:break-word;
+}
+
 .bottonText_button {
   position: relative;
-  width: 100%;
+	width: 100%;
 }
 
 .bottomButton .content {
@@ -283,6 +301,7 @@ const goGetgem = () => {
   top: calc(51* var(--rpx));
   left: calc(64* var(--rpx));
   z-index: 100;
+  font-family: Lato, var(--default-font-family);
   font-size: calc(13* var(--rpx));
   width: calc(65* var(--rpx));
   height: calc(50* var(--rpx));
@@ -298,6 +317,7 @@ const goGetgem = () => {
   top: calc(51* var(--rpx));
   left: calc(185* var(--rpx));
   z-index: 100;
+  font-family: Lato, var(--default-font-family);
   font-size: calc(13* var(--rpx));
   width: calc(65* var(--rpx));
   height: calc(50* var(--rpx));
@@ -312,6 +332,7 @@ const goGetgem = () => {
   top: calc(51* var(--rpx));
   right: calc(59* var(--rpx));
   z-index: 100;
+  font-family: Lato, var(--default-font-family);
   font-size: calc(13* var(--rpx));
   width: calc(65* var(--rpx));
   height: calc(50* var(--rpx));
@@ -332,6 +353,13 @@ const goGetgem = () => {
 .middleTextContent {
   line-height: 130%;
   /* text-align: justify; */
+  text-align: left; /* 文本水平居中 */
+  margin-top: 0; /* 可选：重置上边距 */
+  margin-bottom: 0; /* 可选：重置下边距 */
+}
+
+.middleTextContent > pre {
+	font-family: Lato, var(--default-font-family);
 }
 
 .textContent {
@@ -340,21 +368,23 @@ const goGetgem = () => {
   display: flex;
   z-index: 55;
   box-sizing: border-box;
-  width: 100%;
+	width: 100%;
   padding: 0 5%;
   align-items: center;
   justify-content: center;
+  font-family: Lato, var(--default-font-family);
   font-size: calc(22* var(--rpx));
 }
 
 .textContent .time {
+  font-family: Lato, var(--default-font-family);
   font-size: calc(16* var(--rpx));
   margin: calc(30* var(--rpx)) 0;
 }
 
 .atBottom {
   display: flex;
-  width: 100%;
+	width: 100%;
   height: calc(200* var(--rpx));
   position: relative;
   top: calc(8* var(--rpx));
@@ -395,9 +425,9 @@ const goGetgem = () => {
   position: relative;
   width: calc(32.000001907348633 * var(--rpx));
   height: calc(32.000001907348633 * var(--rpx));
-  margin: calc(0.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
+	/* margin: calc(0.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));*/
   background: url(../assets/images/DollarCoin.png) no-repeat center;
-  background-size: 100% 100%;
+	background-size: calc(32.000001907348633 * var(--rpx)) calc(32.000001907348633 * var(--rpx));
   z-index: 23;
 }
 
@@ -411,7 +441,7 @@ const goGetgem = () => {
   /*  width: calc(79 * var(--rpx));
   height: calc(106 * var(--rpx)); */
   top: calc(16 * var(--rpx));
-  left: calc(153 * var(--rpx));
+	left: calc(139 * var(--rpx));
   padding: calc(10 * var(--rpx)) 0 calc(10 * var(--rpx)) 0;
   z-index: 17;
 }
@@ -490,7 +520,7 @@ const goGetgem = () => {
   height: calc(22.502517700195312 * var(--rpx));
   margin: calc(3.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
   background: url(../assets/images/people.svg) no-repeat center;
-  background-size: 100% 100%;
+  background-size: 100vw 100%;
   z-index: 23;
 }
 
@@ -521,7 +551,8 @@ const goGetgem = () => {
   display: flex;
   color: white;
   justify-content: space-between;
-  width: 100%;
+	width: 100%;
+  font-family: Lato, var(--default-font-family);
   font-size: calc(18 * var(--rpx));
 }
 
@@ -544,7 +575,7 @@ const goGetgem = () => {
 }
 
 .shuffleCard {
-  width: 100%;
+	width: 100%;
   position: relative;
   margin-top: calc(40 * var(--rpx));
   display: flex;
@@ -567,7 +598,7 @@ const goGetgem = () => {
 .bottonText {
   position: absolute;
   bottom: calc(100 * var(--rpx));
-  width: 100%;
+	width: 100%;
 }
 
 .otherButton {
@@ -589,6 +620,7 @@ const goGetgem = () => {
   border: calc(1 * var(--rpx)) solid #FFFFFF;
   border-radius: calc(100 * var(--rpx));
   font-size: calc(24 * var(--rpx));
+  font-family: Lato, var(--default-font-family);
 }
 
 .iconLeft {
@@ -649,13 +681,13 @@ button {
 }
 
 .main-container {
-  width: 100vw;
+	width: 100%;
   /* background: #010007; */
 }
 
 .iphone-x-light-default {
   position: relative;
-  width: calc(428 * var(--rpx));
+  width: 100%;
   height: calc(10 * var(--rpx));
   margin: 0 0 0 0;
   z-index: 1;
@@ -670,8 +702,8 @@ button {
   gap: calc(12 * var(--rpx));
   box-sizing: border-box;
   position: relative;
-  width: 90%;
-  margin: calc(58 * var(--rpx)) 0 0 0;
+  width: 93%;
+  margin: calc(35 * var(--rpx)) 0 0 0;
   padding: calc(15 * var(--rpx)) calc(10 * var(--rpx)) calc(15 * var(--rpx)) calc(10 * var(--rpx));
   cursor: pointer;
   background: #ffffff;
@@ -699,7 +731,10 @@ button {
   flex-shrink: 0;
   flex-basis: auto;
   position: relative;
-  width: calc(282 * var(--rpx));
+  white-space: normal;      /* 允许换行 */
+  overflow-wrap: break-word; /* 单词内换行 */
+  word-wrap: break-word;     /* 老版本的word-wrap属性 */
+  width: 96%;
   height: calc(29 * var(--rpx));
   color: #2a272b;
   font-family: Lato, var(--default-font-family);
@@ -707,13 +742,13 @@ button {
   font-weight: 500;
   line-height: calc(29 * var(--rpx));
   text-align: center;
-  white-space: nowrap;
+  //white-space: nowrap;
   z-index: 33;
 }
 
 /* .light-gradient {
   position: absolute;
-  width: 100vw;
+  width: 100%;
   top: 0;
   background: linear-gradient(168.43deg, #031728 -10.68%, #3C113F 25.6%, #484A64 62.5%, #52757F 82.66%, #5A9C98 100.61%, #701856 112.31%);
   background: url(../assets/images/bg.svg) no-repeat center;
@@ -726,7 +761,7 @@ button {
   height: calc(22.502517700195312 * var(--rpx));
   margin: calc(3.662109375 * var(--rpx)) 0 0 calc(2.4986572265625 * var(--rpx));
   background: url(../assets/images/people.svg) no-repeat center;
-  background-size: 100% 100%;
+  background-size: 100vw 100%;
   z-index: 23;
 }
 </style>

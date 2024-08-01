@@ -11,6 +11,7 @@ const getReferInfo = async (id) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "get",
     url:
@@ -60,11 +61,11 @@ const inviteFriend = () => {
       <div class="friendControl">
         <div class="friendLeft">
           <div>Normal Users</div>
-          <div>150</div>
+          <div>2000</div>
         </div>
         <div class="friendRight">
           <div>Premium Users</div>
-          <div>300</div>
+          <div>10000</div>
         </div>
       </div>
     </div>

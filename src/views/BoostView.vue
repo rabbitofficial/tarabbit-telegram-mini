@@ -9,6 +9,7 @@ const updateUserInfo = async (info) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "post",
     url: helper.baseUrl + "telegram/api/tg/login/update",
@@ -22,6 +23,7 @@ const getTgInfo = async (id) => {
   const result = await axios({
     headers: {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": true,
     },
     method: "get",
     url: helper.baseUrl + "telegram/api/tg/login/fetch?tg_id=" + id,
@@ -56,12 +58,12 @@ const showPopup = (info) => {
 };
 
 const joinCommunity = async () => {
-  if (!userInfoVue.data.joined_X) {
+  if (!userInfoVue.data.joined_community) {
     window.Telegram.WebApp.openTelegramLink('https://t.me/tarabbit')
     await updateUserInfo({
       tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-      points: userInfoVue.data.points + 1500,
-      joined_X: true
+      points: userInfoVue.data.points + 10000,
+      joined_community: true
     });
 
     setTimeout(() => {
@@ -76,12 +78,12 @@ const joinCommunity = async () => {
 }
 
 const joinX = async () => {
-  if (!userInfoVue.data.joined_community) {
+  if (!userInfoVue.data.joined_X) {
     window.Telegram.WebApp.openLink('https://x.com/tarabbitluck')
     await updateUserInfo({
       tg_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-      points: userInfoVue.data.points + 1500,
-      joined_community: true
+      points: userInfoVue.data.points + 500,
+      joined_X: true
     });
 
     setTimeout(() => {
@@ -126,7 +128,7 @@ const joinX = async () => {
           </div>
           <div class="boostMiddle">
             <div class="boostTitle">Join our community</div>
-            <div class="boostNumber">+1500</div>
+            <div class="boostNumber">+10000</div>
           </div>
         </div>
 
@@ -142,7 +144,7 @@ const joinX = async () => {
           </div>
           <div class="boostMiddle">
             <div class="boostTitle">Join our X</div>
-            <div class="boostNumber">+1500</div>
+            <div class="boostNumber">+5000</div>
           </div>
         </div>
 
