@@ -26,7 +26,6 @@ const getTgInfo = async (id) => {
 	const result = await axios({
 		headers: {
 			'Content-Type': 'application/json',
-			'ngrok-skip-browser-warning': true,
 		},
 		method: 'get',
 		url: helper.baseUrl + 'telegram/api/tg/login/fetch?tg_id=' + id,
@@ -57,7 +56,6 @@ const updateTgInfo = async () => {
 	showLoading.value = true;
 	const result = await axios({
 		headers: {
-			'ngrok-skip-browser-warning': true,
 			'Content-Type': 'application/json',
 		},
 		method: 'post',
