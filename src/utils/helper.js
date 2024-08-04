@@ -57,7 +57,6 @@ const helper = {
   test: () => {},
   baseUrl: "https://api.tarabbit.com/",
   inviteLink: "http://t.me/Tarabbit_bot/myapp",
-  // baseUrl: "https://c7ef-210-22-173-90.ngrok-free.app/",
   getRamdomCard,
   getDefaultCards,
   getCard,
