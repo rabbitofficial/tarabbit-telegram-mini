@@ -268,7 +268,6 @@ const checkResult = () => {};
 }
 
 .card-body {
-	padding: 20px;
 }
 
 .slide-up-enter-active,
